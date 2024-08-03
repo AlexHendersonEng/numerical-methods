@@ -1,15 +1,23 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% test script for testing simulation framework
+% basic_simulation script for testing simulation framework
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
+% Clear and close all
+%
 clear all; close all; clc;
+%
+% Add paths
+%
+addpath('..\ode_solvers\');
+addpath('..\optimisers\');
+addpath('..\simulator_components\');
 %
 % Inputs
 %
 tspan = [0, 10];
-solver = EulerBackward(0.01);
+solver = RK4(0.01);
 u = [0, 0, 1, 1];
 u_t = [0, 1, 1 + 1e-3, 10];
 %
