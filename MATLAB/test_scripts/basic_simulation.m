@@ -10,9 +10,11 @@ clear all; close all; clc;
 %
 % Add paths
 %
-addpath('..\ode_solvers\');
-addpath('..\optimisers\');
-addpath('..\simulator_components\');
+file_path = mfilename('fullpath');
+[path, ~, ~] = fileparts(file_path);
+addpath(fullfile(path, '..', 'ode_solvers'));
+addpath(fullfile(path, '..', 'optimisers'));
+addpath(fullfile(path, '..', 'simulator_components'));
 %
 % Inputs
 %
