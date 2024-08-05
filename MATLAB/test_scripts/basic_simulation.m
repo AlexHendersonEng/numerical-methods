@@ -58,10 +58,11 @@ for node_i = 1 : sim_man.n_nodes
          'DisplayName', ['Node: ', num2str(node_i)]);
     hold('on');
 end
+hold('off');
+grid('on');
 xlabel('Time (s)');
 ylabel('Output');
 legend('Location', 'northeast');
-hold('off');
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % End
