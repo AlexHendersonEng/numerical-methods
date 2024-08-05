@@ -18,8 +18,9 @@ addpath(fullfile(path, '..', 'simulator_components'));
 %
 % Inputs
 %
-tspan = [0, 10];
-solver = RK4(0.01);
+h = 0.01;
+t = 0 : h : 10;
+solver = RK4(t(1), h);
 u = [0, 0, 1, 1];
 u_t = [0, 1, 1 + 1e-3, 10];
 %
@@ -39,12 +40,28 @@ adjacency = [0, 0, 0, 0, 0;
 % Run simulation
 %
 sim_man = SimulationManager(nodes, adjacency, solver);
-sim_man.run(tspan);
+for step = 1 : numel(t) - 1
+    sim_man.step();
+end
+sim_man.terminate();
 %
 % Plot outputs
 %
 sim_man.plot_digraph();
-sim_man.plot_results();
+%
+% Plot the output of all nodes against time
+%
+figure();
+for node_i = 1 : sim_man.n_nodes
+    plot(t, sim_man.nodes{node_i}.logger.output, ...
+         'LineWidth', 1.5, ...
+         'DisplayName', ['Node: ', num2str(node_i)]);
+    hold('on');
+end
+xlabel('Time (s)');
+ylabel('Output');
+legend('Location', 'northeast');
+hold('off');
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % End

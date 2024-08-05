@@ -11,7 +11,6 @@ classdef SimulationManager < handle
         n_nodes
         adjacency
         solver
-        t
         order   % Column 1 is node index in execution order
                 % Column 2 is column 1 node dependencies
     end
@@ -19,58 +18,20 @@ classdef SimulationManager < handle
     methods (Access = public)
         function obj = SimulationManager(nodes, adjacency, solver)
 %
-%           SimulationManager instatiation method which assigns nodes,
-%           adjacency matrix and solver
+%           Assign variables
 %
             obj.nodes = nodes;
             obj.n_nodes = numel(obj.nodes);
             obj.adjacency = adjacency;
             obj.solver = solver;
             obj.order = cell(obj.n_nodes, 2);
-        end
 %
-        function plot_digraph(obj)
+%           Initialise network
 %
-%           Plot adjacecny matrix in graphical form
-%
-            graph = digraph(obj.adjacency);
-            plot(graph);
-        end
-%
-        function run(obj, tspan)
-%
-%           Run the simulation for the specified time span
-%
-            obj.t = tspan(1) : obj.solver.h : tspan(2);
             obj.initialise();
-            obj.step();
-            obj.terminate();
         end
 %
-        function plot_results(obj)
-%
-%           Plot the output of all nodes against time
-%
-            figure();
-            for node_idx = 1 : obj.n_nodes
-                plot(obj.t, obj.nodes{node_idx}.logger.output, ...
-                     'LineWidth', 1.5, ...
-                     'DisplayName', ['Node: ', num2str(node_idx)]);
-                hold('on');
-            end
-            xlabel('Time (s)');
-            ylabel('Output');
-            legend('Location', 'northeast');
-            hold('off');
-        end
-    end
-%
-    methods (Access = private)
         function initialise(obj)
-%
-%           Initialise solver time
-%
-            obj.solver.update(obj.t(1));
 %
 %           Get initialisation order
 %
@@ -138,31 +99,26 @@ classdef SimulationManager < handle
 %
         function step(obj)
 %
-%           Step forward in time
+%           Update solver time
 %
-            for t_curr = obj.t(2 : end)
+            obj.solver.update();
 %
-%               Update solver time
+%           Step nodes
 %
-                obj.solver.update(t_curr);
+            for exec_i = 1 : obj.n_nodes
 %
-%               Step nodes
+%               Add up dependent nodes output
 %
-                for exec_i = 1 : obj.n_nodes
-%
-%                   Add up dependent nodes output
-%
-                    output = 0;
-                    for node_d = obj.order{exec_i, 2}
-                        output = output + obj.nodes{node_d}.output;
-                    end
-%
-%                   Step node
-%
-                    node_i = obj.order{exec_i, 1};
-                    obj.nodes{node_i}.input = output;
-                    obj.nodes{node_i}.step();
+                output = 0;
+                for node_d = obj.order{exec_i, 2}
+                    output = output + obj.nodes{node_d}.output;
                 end
+%
+%               Step node
+%
+                node_i = obj.order{exec_i, 1};
+                obj.nodes{node_i}.input = output;
+                obj.nodes{node_i}.step();
             end
         end
 %
@@ -173,6 +129,14 @@ classdef SimulationManager < handle
             for node = 1 : obj.n_nodes
                 obj.nodes{node}.terminate();
             end
+        end
+%
+        function plot_digraph(obj)
+%
+%           Plot adjacecny matrix in graphical form
+%
+            graph = digraph(obj.adjacency);
+            plot(graph);
         end
     end
 %
