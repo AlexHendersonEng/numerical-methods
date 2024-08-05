@@ -30,12 +30,12 @@ t = 0 : T : 10;
 u_t = t;
 u = randn(size(u_t));
 solver = RK4(t(1), T);
-omega = 1;
+omega = 10;
 %
 % Set up graph
 %
 nodes = {Input(u, u_t), ...
-         TF1(omega, 0)};
+         TF1(1 / omega, 0)};
 adjacency = [0, 1;
              0, 0];
 %
@@ -62,7 +62,7 @@ f_y = (Fs / numel(y)) * (0 : numel(U) - 1);
 %
 % Filter frequency response
 %
-G = sqrt(1 ./ (1 + f_y .^ 2));
+G = sqrt(1 ./ (1 + (1 / omega) * f_y .^ 2));
 %
 % Plot the output of all nodes against time
 %
