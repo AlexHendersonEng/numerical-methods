@@ -147,7 +147,7 @@ classdef SimulationManager < handle
 %
                 obj.nodes{node_i}.input = input;
                 obj.nodes{node_i}.output = output;
-                obj.nodes{node_i}.logger.t(1) = t;
+                obj.nodes{node_i}.logger.t = t;
                 obj.nodes{node_i}.logger.input = input;
                 obj.nodes{node_i}.logger.output = output;
             end
