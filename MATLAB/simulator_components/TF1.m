@@ -45,6 +45,21 @@ classdef TF1 < Component
             obj.output = obj.solver.step(@(t, y) dydt(t, y), obj.output);
             obj.logger = obj.logger.log(obj);
         end
+%
+        function dydw = derivative(obj)
+%
+%           Calculate the derivative of the output with respect to the time
+%           constant
+%
+            dydw = (1 / obj.tau) * (obj.output - obj.input);
+        end
+%
+        function update(obj, weight_update)
+%
+%           Update weight
+%
+            obj.tau = obj.tau + weight_update;
+        end
     end
 end
 %

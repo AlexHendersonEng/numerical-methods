@@ -26,7 +26,7 @@ classdef Input < Component
             end
             obj.u = u;
             obj.u_t = u_t;
-            obj.input = [];
+            obj.input = 0;
             obj.logging = logging;
         end
 %

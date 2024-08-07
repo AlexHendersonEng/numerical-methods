@@ -23,11 +23,12 @@ classdef Gain < Component
             obj.logging = logging;
         end
 %
-        function initialise(obj, ~, input)
+        function initialise(obj, solver, input)
 %
 %           Initialise gain component by initialising input/output and
 %           logging initial values 
 %
+            obj.solver = solver;
             obj.input = input;
             obj.output = obj.gain * obj.input;
             obj.logger = obj.logger.log(obj);
@@ -39,6 +40,20 @@ classdef Gain < Component
 %
             obj.output = obj.gain * obj.input;
             obj.logger = obj.logger.log(obj);
+        end
+%
+        function dydw = derivative(obj)
+%
+%           Calculate derivate of output with respect to weight
+%
+            dydw = obj.input;
+        end
+%
+        function update(obj, weight_update)
+%
+%           Update weight
+%
+            obj.gain = obj.gain + weight_update;
         end
     end
 end

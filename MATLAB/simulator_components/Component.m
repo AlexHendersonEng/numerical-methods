@@ -62,6 +62,20 @@ classdef Component < handle
                 obj.logger.log(obj);
             end
         end
+%
+        function dydw = derivative(~)
+%
+%           Calculate derivate of output with respect to weight
+%
+            dydw = 0;
+        end
+%
+        function update(~, ~)
+%
+%           Update weight
+%
+            
+        end
     end
 %
 end
