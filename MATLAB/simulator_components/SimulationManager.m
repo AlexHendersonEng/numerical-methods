@@ -33,7 +33,7 @@ classdef SimulationManager < handle
 %
         function initialise(obj)
 %
-%           Get initialisation order
+%           Get execution order
 %
             count = 1;
             for node_i = 1 : obj.n_nodes
@@ -58,12 +58,12 @@ classdef SimulationManager < handle
                 obj.nodes{node_i}.initialise(obj.solver, output);
             end
 %
-%           Get initialisation order recursively
+%           Get execution order recursively
 %
             function count = exec_order(node_i, count)
 %
 %               General node base case: If node has already been added to
-%               initialisation order return
+%               execution order return
 %
                 if any(node_i == [obj.order{:, 1}])
                     return
@@ -74,7 +74,7 @@ classdef SimulationManager < handle
                 input_idx = find(obj.adjacency(:, node_i))';
 %
 %               Input node base case: If node has no inputs it must be an
-%               input node so we will add it to the initialisation order
+%               input node so we will add it to the execution order
 %               with no dependent nodes
 %
                 if isempty(input_idx)
@@ -83,7 +83,7 @@ classdef SimulationManager < handle
                     return
                 end
 %
-%               Loop through input nodes and add them to initialisation
+%               Loop through input nodes and add them to execution
 %               order if required
 %
                 dep_array = zeros(size(input_idx));
@@ -128,6 +128,28 @@ classdef SimulationManager < handle
 %
             for node = 1 : obj.n_nodes
                 obj.nodes{node}.terminate();
+            end
+        end
+%
+        function reset(obj)
+%
+%           Reset nodes
+%
+            for node_i = 1 : obj.n_nodes
+%
+%               Get first input and output
+%
+                t = obj.nodes{node_i}.logger.t(1);
+                input = obj.nodes{node_i}.logger.input(1);
+                output = obj.nodes{node_i}.logger.output(1);
+%
+%               Update nodes
+%
+                obj.nodes{node_i}.input = input;
+                obj.nodes{node_i}.output = output;
+                obj.nodes{node_i}.logger.t(1) = t;
+                obj.nodes{node_i}.logger.input = input;
+                obj.nodes{node_i}.logger.output = output;
             end
         end
 %
