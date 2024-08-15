@@ -27,9 +27,11 @@ u_t = [0, 1, 1 + 1e-3, 10];
 % Set up 'black box' model
 %
 nodes = {Input(u, u_t), ...
+         Gain(2), ...
          TF1(1, 0)};
-adjacency = [0, 1;
-             0, 0];
+adjacency = [0, 1, 0;
+             0, 0, 1;
+             0, 0, 0];
 %
 % Run 'black box' simulation
 %
@@ -47,18 +49,20 @@ y = sim_man.nodes{end}.logger.output;
 % Set up surrogate model
 %
 nodes = {Input(u, u_t), ...
-         TF1(10, 0), ...
+         Gain(1), ...
+         TF1(1, 0), ...
          L2(y, y_t)};
-adjacency = [0, 1, 0;
-             0, 0, 1;
-             0, 0, 0];
+adjacency = [0, 1, 0, 0;
+             0, 0, 1, 0;
+             0, 0, 0, 1;
+             0, 0, 0, 0];
 %
 % Optimise surrogate model
 %
 solver.t = t(1);
 sim_man = SimulationManager(nodes, adjacency, solver);
-optim = GD(nodes, adjacency, 1e-2);
-for epoch = 1 : 100
+optim = Adam(nodes, adjacency, 0.02);
+for epoch = 1 : 200
 %
 %   Initialise error
 %
