@@ -1,39 +1,42 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% TF1 class which implements a first order transfer function component
+% L2 class which implements an L2 loss component
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-classdef TF1 < Component
+classdef L2 < Component
 %
     properties
-        tau;
+        y
+        y_t
+        y_actual
     end
 %
     methods
-        function obj = TF1(tau, ic, logging)
+        function obj = L2(y, y_t, logging)
 %
-%           TF1 instatiator assigns time constant, initial condition
-%           and logging option
+%           L2 instatiator assigns goal time varying signal time and 
+%           values and logging option
 %
             arguments
-                tau
-                ic
+                y
+                y_t
                 logging = true
             end
-            obj.tau = tau;
-            obj.output = ic;
+            obj.y = y;
+            obj.y_t = y_t;
             obj.logging = logging;
         end
 %
         function initialise(obj, solver, input)
 %
-%           Initialise TF1 component by initialising solver, input/output
+%           Initialise L2 loss component by initialising input/output
 %           and logging initial values 
 %
             obj.solver = solver;
             obj.input = input;
-            obj.output = obj.output;
+            obj.y_actual = interp1(obj.y_t, obj.y, obj.solver.t);
+            obj.output = (obj.y_actual - obj.input) ^ 2;
             obj.logger = obj.logger.log(obj);
         end
 %
@@ -41,8 +44,8 @@ classdef TF1 < Component
 %
 %           Step forward in time calculating new output and logging data 
 %
-            dydt = @(t, y) (1 / obj.tau) * (obj.input - y);
-            obj.output = obj.solver.step(@(t, y) dydt(t, y), obj.output);
+            obj.y_actual = interp1(obj.y_t, obj.y, obj.solver.t);
+            obj.output = (obj.y_actual - obj.input) ^ 2;
             obj.logger = obj.logger.log(obj);
         end
 %
@@ -50,15 +53,8 @@ classdef TF1 < Component
 %
 %           Calculate derivative of output with respect to input and weight
 %
-            dydx = 1;
-            dydw = (1 / obj.tau) * (obj.output - obj.input);
-        end
-%
-        function update(obj, weight_update)
-%
-%           Update weight
-%
-            obj.tau = obj.tau + weight_update;
+            dydx = 2 * (obj.input - obj.y_actual);
+            dydw = 0;
         end
     end
 end

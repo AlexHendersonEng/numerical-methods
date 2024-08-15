@@ -10,7 +10,8 @@ classdef Optimiser < handle
         nodes
         adjacency
         n_nodes
-        J
+        grad
+        weight_grad
         order   % Column 1 is node index in propagation order
                 % Column 2 is column 1 node dependencies
     end
@@ -23,7 +24,8 @@ classdef Optimiser < handle
             obj.nodes = nodes;
             obj.adjacency = adjacency;
             obj.n_nodes = size(obj.adjacency, 1);
-            obj.J = zeros(obj.n_nodes, 1);
+            obj.grad = zeros(obj.n_nodes, 1);
+            obj.weight_grad = zeros(obj.n_nodes, 1);
             obj.order = cell(obj.n_nodes, 2);
 %
 %           Get propagation order
@@ -49,7 +51,7 @@ classdef Optimiser < handle
 %
                 output_idx = find(obj.adjacency(node_i, :));
 %
-%               Ouput node base case: If node has no outputs it must be an
+%               Output node base case: If node has no outputs it must be an
 %               output node so we will add it to the propagation order
 %               with no dependent nodes
 %
@@ -83,27 +85,36 @@ classdef Optimiser < handle
 %
                 node_i = obj.order{prop_i, 1};
 %
-%               If no dependent nodes then it is an output so we dont want
-%               to multiply it by zero when calculating the Jacobian so set
-%               dedy to 1
+%               If no dependent nodes then it is an output node and the
+%               gradient should be the derivative of its output (the error)
+%               with respect to the input and there is no weight to update
+%               gradient of
 %
                 nodes_d = obj.order{prop_i, 2};
                 if isempty(nodes_d)
-                    dedy = 1;
-                else
-                    dedy = 0;
+                    [dydx, ~] = obj.nodes{node_i}.derivative();
+                    obj.grad(node_i) = dydx;
+                    obj.weight_grad(node_i) = 0;
+                    continue
                 end
 %
-%               Add up dependent nodes gradient
+%               Add up dependent nodes gradient which should have already
+%               been computed
 %
+                grad_sum = 0;
                 for node_d = nodes_d
-                    dedy = dedy + obj.J(node_d);
+                    [dydx, ~] = obj.nodes{node_d}.derivative();
+                    grad_sum = dydx;
                 end
 %
-%               Calculate Jacobian
+%               Calculate gradient of error with respect to node input.
+%               The grad_sum term gives de/dy, so, multiplying by dy/dx
+%               gives de/dx and multiplying de/dy by dy/dw gives the de/dw
+%               which is the weight gradient
 %
-                dydw = obj.nodes{node_i}.derivative();
-                obj.J(node_i) = dedy * dydw;
+                [dydx, dydw] = obj.nodes{node_i}.derivative();
+                obj.grad(node_i) = obj.grad(node_i) + grad_sum * dydx;
+                obj.weight_grad(node_i) = obj.weight_grad(node_i) + grad_sum * dydw;
             end
         end
 %
@@ -112,7 +123,8 @@ classdef Optimiser < handle
         end
 %
         function zero_grad(obj)
-            obj.J = zeros(obj.n_nodes, 1);
+            obj.grad = zeros(obj.n_nodes, 1);
+            obj.weight_grad = zeros(obj.n_nodes, 1);
         end
     end
 %

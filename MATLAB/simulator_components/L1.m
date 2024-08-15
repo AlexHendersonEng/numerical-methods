@@ -49,11 +49,12 @@ classdef L1 < Component
             obj.logger = obj.logger.log(obj);
         end
 %
-        function dedy = derivative(obj)
+        function [dydx, dydw] = derivative(obj)
 %
-%           Calculate derivative of error with respect to input
+%           Calculate derivative of output with respect to input and weight
 %
-            dedy = -sign(obj.y_actual - obj.input);
+            dydx = -sign(obj.y_actual - obj.input);
+            dydw = 0;
         end
     end
 end

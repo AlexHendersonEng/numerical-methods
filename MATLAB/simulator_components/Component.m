@@ -63,10 +63,11 @@ classdef Component < handle
             end
         end
 %
-        function dydw = derivative(~)
+        function [dydx, dydw] = derivative(~)
 %
-%           Calculate derivate of output with respect to weight
+%           Calculate derivate of output with respect to input and weight
 %
+            dydx = 0;
             dydw = 0;
         end
 %

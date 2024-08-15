@@ -48,7 +48,7 @@ y = sim_man.nodes{end}.logger.output;
 %
 nodes = {Input(u, u_t), ...
          TF1(10, 0), ...
-         L1(y, y_t)};
+         L2(y, y_t)};
 adjacency = [0, 1, 0;
              0, 0, 1;
              0, 0, 0];
@@ -57,8 +57,8 @@ adjacency = [0, 1, 0;
 %
 solver.t = t(1);
 sim_man = SimulationManager(nodes, adjacency, solver);
-optim = GD(nodes, adjacency, 100);
-for epoch = 1 : 20
+optim = GD(nodes, adjacency, 1e-2);
+for epoch = 1 : 100
 %
 %   Initialise error
 %
@@ -74,10 +74,10 @@ for epoch = 1 : 20
 %
     for step = 1 : numel(t) - 1
         sim_man.step();
+        optim.backward();
     end
     sim_man.terminate();
     error = error + sim_man.nodes{end}.output;
-    optim.backward();
 %
 %   Print error and step optimiser
 %
@@ -95,7 +95,7 @@ hold('on');
 plot(y_t, y, ...
      'LineWidth', 1.5, ...
      'DisplayName', 'Black Box');
-plot(sim_man.nodes{2}.logger.t, sim_man.nodes{2}.logger.output, ...
+plot(sim_man.nodes{end - 1}.logger.t, sim_man.nodes{end - 1}.logger.output, ...
      'LineWidth', 1.5, ...
      'LineStyle', '--', ...
      'DisplayName', 'Surrogate');

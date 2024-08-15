@@ -42,10 +42,11 @@ classdef Gain < Component
             obj.logger = obj.logger.log(obj);
         end
 %
-        function dydw = derivative(obj)
+        function [dydx, dydw] = derivative(obj)
 %
-%           Calculate derivate of output with respect to weight
+%           Calculate derivate of output with respect to input and weight
 %
+            dydx = obj.gain;
             dydw = obj.input;
         end
 %
