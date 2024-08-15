@@ -103,8 +103,7 @@ classdef Optimiser < handle
 %
                 grad_sum = 0;
                 for node_d = nodes_d
-                    [dydx, ~] = obj.nodes{node_d}.derivative();
-                    grad_sum = dydx;
+                    grad_sum = grad_sum + obj.grad(node_d);
                 end
 %
 %               Calculate gradient of error with respect to node input.
