@@ -36,7 +36,7 @@ classdef L2 < Component
             obj.solver = solver;
             obj.input = input;
             obj.y_actual = interp1(obj.y_t, obj.y, obj.solver.t);
-            obj.output = (obj.y_actual - obj.input) ^ 2;
+            obj.output = 0.5 * (obj.y_actual - obj.input) ^ 2;
             obj.logger = obj.logger.log(obj);
         end
 %
@@ -53,7 +53,7 @@ classdef L2 < Component
 %
 %           Calculate derivative of output with respect to input and weight
 %
-            dydx = 2 * (obj.input - obj.y_actual);
+            dydx = obj.input - obj.y_actual;
             dydw = 0;
         end
     end
