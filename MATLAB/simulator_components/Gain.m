@@ -42,19 +42,26 @@ classdef Gain < Component
             obj.logger = obj.logger.log(obj);
         end
 %
-        function [dydx, dydw] = derivative(obj)
+        function [dydx, dydp] = derivative(obj)
 %
-%           Calculate derivate of output with respect to input and weight
+%           Calculate derivate of output with respect to input and param
 %
             dydx = obj.gain;
-            dydw = obj.input;
+            dydp = obj.input;
         end
 %
-        function update(obj, weight_update)
+        function update(obj, param_update)
 %
-%           Update weight
+%           Update param
 %
-            obj.gain = obj.gain + weight_update;
+            obj.gain = obj.gain + param_update;
+        end
+%
+        function params =  parameters(obj)
+%
+%           Return tunable parameters in array
+%
+            params = obj.gain;
         end
     end
 end

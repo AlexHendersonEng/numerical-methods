@@ -40,27 +40,27 @@ classdef Adam < Optimiser
 %
         function step(obj)
 %
-%           Loop through nodes and update weights
+%           Loop through nodes and update params
 %
             for node_i = 1 : obj.n_nodes
 %
 %               Update biased first and second moment estimate
 %
-                obj.m(node_i) = obj.beta1 * obj.m(node_i) + (1 - obj.beta1) * obj.weight_grad(node_i);
-                obj.v(node_i) = obj.beta2 * obj.v(node_i) + (1 - obj.beta2) * obj.weight_grad(node_i) ^ 2;
+                obj.m(node_i) = obj.beta1 * obj.m(node_i) + (1 - obj.beta1) * obj.param_grad(node_i);
+                obj.v(node_i) = obj.beta2 * obj.v(node_i) + (1 - obj.beta2) * obj.param_grad(node_i) ^ 2;
 %
 %               Compute bias corrected first and second moment estimate 
 %
                 m_hat = obj.m(node_i) / (1 - obj.beta1 ^ obj.step_num);
                 v_hat = obj.v(node_i) / (1 - obj.beta2 ^ obj.step_num);
 %
-%               Calculate weight update
+%               Calculate param update
 %
-                weight_update = -obj.h * m_hat / (sqrt(v_hat) + 1e-8);
+                param_update = -obj.h * m_hat / (sqrt(v_hat) + 1e-8);
 %
-%               Update node weight
+%               Update node param
 %
-                obj.nodes{node_i}.update(weight_update);
+                obj.nodes{node_i}.update(param_update);
             end
 %
 %           Increment step number

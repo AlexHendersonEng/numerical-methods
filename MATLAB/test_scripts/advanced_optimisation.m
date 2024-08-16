@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% basic_simulation script for testing simulation framework
+% advanced_optimisation script for optimising a surrogate model
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -50,7 +50,7 @@ y = sim_man.nodes{end}.logger.output;
 %
 nodes = {Input(u, u_t), ...
          Gain(1), ...
-         TF1(1, 0), ...
+         TF1(0.1, 0), ...
          L2(y, y_t)};
 adjacency = [0, 1, 0, 0;
              0, 0, 1, 0;
@@ -61,32 +61,15 @@ adjacency = [0, 1, 0, 0;
 %
 solver.t = t(1);
 sim_man = SimulationManager(nodes, adjacency, solver);
-optim = Adam(nodes, adjacency, 0.02);
-for epoch = 1 : 200
-%
-%   Initialise error
-%
-    error = 0;
-%
-%   Reset simulation
-% 
-    sim_man.reset();
-    solver.t = t(1);
-    optim.zero_grad();
-%
-%   Run simulation
-%
-    for step = 1 : numel(t) - 1
-        sim_man.step();
-        optim.backward();
-    end
-    sim_man.terminate();
-    error = error + sim_man.nodes{end}.output;
-%
-%   Print error and step optimiser
-%
-    disp("Epoch: " + num2str(epoch) + ", Error: " + num2str(error));
+optim = PSO(nodes, ...
+            adjacency, ...
+            @(x) loss_fcn(x, sim_man, t), ...
+            'lb', [0, 0], ...
+            'ub', [10, 10]);
+for iter = 1 : 50
+    optim.backward();
     optim.step();
+    disp("Iter: " + num2str(iter) + ", Loss: " + num2str(optim.best_particle.loss));
 end
 %
 % Plot 'black box' outputs vs surrogate
@@ -108,6 +91,37 @@ grid('on');
 xlabel('Time (s)');
 ylabel('Output');
 legend('Location', 'northeast')
+%
+% Cost function
+%
+function loss = loss_fcn(x, sim_man, t)
+%
+%   Initialise loss
+%
+    loss = 0;
+%
+%   Initialise nodes
+%
+    for node_i = 1 : numel(sim_man.nodes)
+        params = sim_man.nodes{node_i}.parameters();
+        param_update = x(1 : numel(params)) - params;
+        sim_man.nodes{node_i}.update(param_update);
+        x(1 : numel(params)) = [];
+    end
+%
+%   Reset simulation
+% 
+    sim_man.reset();
+    sim_man.solver.t = t(1);
+%
+%   Run simulation
+%
+    for step = 1 : numel(t) - 1
+        sim_man.step();
+        loss = loss + sim_man.nodes{end}.output;
+    end
+    sim_man.terminate();
+end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % End

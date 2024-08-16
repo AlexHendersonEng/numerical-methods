@@ -63,19 +63,26 @@ classdef Component < handle
             end
         end
 %
-        function [dydx, dydw] = derivative(~)
+        function [dydx, dydp] = derivative(~)
 %
-%           Calculate derivate of output with respect to input and weight
+%           Calculate derivate of output with respect to input and param
 %
             dydx = 0;
-            dydw = 0;
+            dydp = 0;
         end
 %
         function update(~, ~)
 %
-%           Update weight
+%           Update param
 %
             
+        end
+%
+        function params =  parameters(~)
+%
+%           Return tunable parameters in array
+%
+            params = [];
         end
     end
 %

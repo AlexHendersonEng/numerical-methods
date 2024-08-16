@@ -46,19 +46,26 @@ classdef TF1 < Component
             obj.logger = obj.logger.log(obj);
         end
 %
-        function [dydx, dydw] = derivative(obj)
+        function [dydx, dydp] = derivative(obj)
 %
-%           Calculate derivative of output with respect to input and weight
+%           Calculate derivative of output with respect to input and param
 %
             dydx = 1;
-            dydw = (1 / obj.tau) * (obj.output - obj.input);
+            dydp = (1 / obj.tau) * (obj.output - obj.input);
         end
 %
-        function update(obj, weight_update)
+        function update(obj, param_update)
 %
-%           Update weight
+%           Update param
 %
-            obj.tau = obj.tau + weight_update;
+            obj.tau = obj.tau + param_update;
+        end
+%
+        function params =  parameters(obj)
+%
+%           Return tunable parameters in array
+%
+            params = obj.tau;
         end
     end
 end

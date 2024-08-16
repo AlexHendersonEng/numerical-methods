@@ -11,7 +11,7 @@ classdef Optimiser < handle
         adjacency
         n_nodes
         grad
-        weight_grad
+        param_grad
         order   % Column 1 is node index in propagation order
                 % Column 2 is column 1 node dependencies
     end
@@ -25,7 +25,7 @@ classdef Optimiser < handle
             obj.adjacency = adjacency;
             obj.n_nodes = size(obj.adjacency, 1);
             obj.grad = zeros(obj.n_nodes, 1);
-            obj.weight_grad = zeros(obj.n_nodes, 1);
+            obj.param_grad = zeros(obj.n_nodes, 1);
             obj.order = cell(obj.n_nodes, 2);
 %
 %           Get propagation order
@@ -77,7 +77,7 @@ classdef Optimiser < handle
 %
         function backward(obj)
 %
-%           Get weight update for all nodes
+%           Get param update for all nodes
 %
             for prop_i = 1 : obj.n_nodes
 %
@@ -87,14 +87,14 @@ classdef Optimiser < handle
 %
 %               If no dependent nodes then it is an output node and the
 %               gradient should be the derivative of its output (the error)
-%               with respect to the input and there is no weight to update
+%               with respect to the input and there is no param to update
 %               gradient of
 %
                 nodes_d = obj.order{prop_i, 2};
                 if isempty(nodes_d)
                     [dydx, ~] = obj.nodes{node_i}.derivative();
                     obj.grad(node_i) = dydx;
-                    obj.weight_grad(node_i) = 0;
+                    obj.param_grad(node_i) = 0;
                     continue
                 end
 %
@@ -108,12 +108,12 @@ classdef Optimiser < handle
 %
 %               Calculate gradient of error with respect to node input.
 %               The grad_sum term gives de/dy, so, multiplying by dy/dx
-%               gives de/dx and multiplying de/dy by dy/dw gives the de/dw
-%               which is the weight gradient
+%               gives de/dx and multiplying de/dy by dy/dp gives the de/dp
+%               which is the param gradient
 %
-                [dydx, dydw] = obj.nodes{node_i}.derivative();
+                [dydx, dydp] = obj.nodes{node_i}.derivative();
                 obj.grad(node_i) = obj.grad(node_i) + grad_sum * dydx;
-                obj.weight_grad(node_i) = obj.weight_grad(node_i) + grad_sum * dydw;
+                obj.param_grad(node_i) = obj.param_grad(node_i) + grad_sum * dydp;
             end
         end
 %
@@ -123,7 +123,7 @@ classdef Optimiser < handle
 %
         function zero_grad(obj)
             obj.grad = zeros(obj.n_nodes, 1);
-            obj.weight_grad = zeros(obj.n_nodes, 1);
+            obj.param_grad = zeros(obj.n_nodes, 1);
         end
     end
 %
