@@ -79,9 +79,7 @@ classdef PSO < Optimiser
 %           Give each particle a random starting position
 %
             for p_i = 1 : obj.swarm_size
-                for x_i = 1 : obj.n_params
-                    obj.particles(p_i).x = obj.lb + rand(1, obj.n_params) .* (obj.ub - obj.lb);
-                end
+                obj.particles(p_i).x = obj.lb + rand(1, obj.n_params) .* (obj.ub - obj.lb);
             end
         end
 %
