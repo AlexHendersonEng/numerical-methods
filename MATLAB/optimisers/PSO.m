@@ -100,7 +100,9 @@ classdef PSO < Optimiser
             if obj.particles(min_idx).loss < obj.best_particle.loss
                 obj.best_particle = obj.particles(min_idx);
             end
-
+%
+%           Loop over all particles
+%
             for p_i = 1 : obj.swarm_size
 %
 %               Personal best update

@@ -98,7 +98,7 @@ classdef GA < Optimiser
             
             weights = 1 ./ ([obj.particles.loss] + 1e-8);
 %
-%           Generate new probabilities
+%           Loop over all particles
 %
             for p_i = 1 : obj.pop_size
 %
