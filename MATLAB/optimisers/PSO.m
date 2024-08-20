@@ -69,10 +69,10 @@ classdef PSO < Optimiser
 %           Generate bounds if required and assign maximum velocity
 %
             if isempty(obj.lb)
-                obj.lb = rempmat(-100, 1, obj.n_params);
+                obj.lb = repmat(-100, 1, obj.n_params);
             end
             if isempty(obj.ub)
-                obj.ub = rempmat(100, 1, obj.n_params);
+                obj.ub = repmat(100, 1, obj.n_params);
             end
             obj.v_max = 0.1 * norm(obj.ub - obj.lb);
 %

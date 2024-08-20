@@ -56,10 +56,10 @@ classdef GA < Optimiser
 %           Generate bounds if required and assign maximum velocity
 %
             if isempty(obj.lb)
-                obj.lb = rempmat(-100, 1, obj.n_params);
+                obj.lb = repmat(-100, 1, obj.n_params);
             end
             if isempty(obj.ub)
-                obj.ub = rempmat(100, 1, obj.n_params);
+                obj.ub = repmat(100, 1, obj.n_params);
             end
 %
 %           Give each particle a random starting position
