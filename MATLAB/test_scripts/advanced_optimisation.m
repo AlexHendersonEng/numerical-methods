@@ -61,15 +61,27 @@ adjacency = [0, 1, 0, 0;
 %
 solver.t = t(1);
 sim_man = SimulationManager(nodes, adjacency, solver);
-optim = SA(nodes, ...
-            adjacency, ...
-            @(x) loss_fcn(x, sim_man, t), ...
-            'lb', [0.1, 0.1], ...
-            'ub', [10, 10]);
+optim = Bayes(nodes, ...
+              adjacency, ...
+              @(x) loss_fcn(x, sim_man, t), ...
+              'lb', [0.1, 0.1], ...
+              'ub', [10, 10]);
+optim.backward()
 for iter = 1 : 50
-    optim.backward();
     optim.step();
-    disp("Iter: " + num2str(iter) + ", Loss: " + num2str(optim.best_particle.loss));
+    optim.backward();
+    disp("Iter: " + num2str(iter) + ", Loss: " + num2str(min(optim.y_train)));
+end
+%
+% Apply best params found
+%
+[~, min_idx] = min(optim.y_train);
+x = optim.x_train(min_idx, :);
+for node_i = 1 : numel(sim_man.nodes)
+    params = sim_man.nodes{node_i}.parameters();
+    param_update = x(1 : numel(params)) - params;
+    sim_man.nodes{node_i}.update(param_update);
+    x(1 : numel(params)) = [];
 end
 %
 % Plot 'black box' outputs vs surrogate
