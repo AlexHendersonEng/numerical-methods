@@ -81,9 +81,6 @@ classdef SA < Optimiser
             for p_i = 1 : obj.pop_size
                 obj.particles(p_i).loss = obj.loss_fcn(obj.particles(p_i).x);
             end
-        end
-%
-        function step(obj)
 %
 %           Global best update
 %
@@ -91,6 +88,9 @@ classdef SA < Optimiser
             if obj.particles(min_idx).loss < obj.best_particle.loss
                 obj.best_particle = obj.particles(min_idx);
             end
+        end
+%
+        function step(obj)
 %
 %           Loop over all particles
 %

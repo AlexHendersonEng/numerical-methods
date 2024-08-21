@@ -67,8 +67,8 @@ classdef Component < handle
 %
 %           Calculate derivate of output with respect to input and param
 %
-            dydx = 0;
-            dydp = 0;
+            dydx = [];
+            dydp = [];
         end
 %
         function update(~, ~)

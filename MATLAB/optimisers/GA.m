@@ -78,6 +78,13 @@ classdef GA < Optimiser
             for p_i = 1 : obj.pop_size
                 obj.particles(p_i).loss = obj.loss_fcn(obj.particles(p_i).x);
             end
+%
+%           Global best update
+%
+            [~, min_idx] = min([obj.particles.loss]);
+            if obj.particles(min_idx).loss < obj.best_particle.loss
+                obj.best_particle = obj.particles(min_idx);
+            end
         end
 %
         function step(obj)
@@ -86,16 +93,8 @@ classdef GA < Optimiser
 %
             new_particles = obj.particles;
 %
-%           Global best update
-%
-            [~, min_idx] = min([obj.particles.loss]);
-            if obj.particles(min_idx).loss < obj.best_particle.loss
-                obj.best_particle = obj.particles(min_idx);
-            end
-%
 %           Generate selection probabilities
 %
-            
             weights = 1 ./ ([obj.particles.loss] + 1e-8);
 %
 %           Loop over all particles

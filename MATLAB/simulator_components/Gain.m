@@ -7,7 +7,7 @@
 classdef Gain < Component
 %
     properties
-        gain;
+        gain % Row vector of gains
     end
 %
     methods
@@ -30,7 +30,7 @@ classdef Gain < Component
 %
             obj.solver = solver;
             obj.input = input;
-            obj.output = obj.gain * obj.input;
+            obj.output = obj.gain .* obj.input;
             obj.logger = obj.logger.log(obj);
         end
 %
@@ -38,7 +38,7 @@ classdef Gain < Component
 %
 %           Step forward in time calculating new output and logging data 
 %
-            obj.output = obj.gain * obj.input;
+            obj.output = obj.gain .* obj.input;
             obj.logger = obj.logger.log(obj);
         end
 %

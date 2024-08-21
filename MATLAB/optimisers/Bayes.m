@@ -9,8 +9,9 @@ classdef Bayes < Optimiser
     properties
         loss_fcn % Cost function
         n_params % Number of parameters
-        x_train % Training points
-        y_train % Training outputs
+        particles; % Particles struct
+        best_particle % Best particle struct
+        n_computed % Number of particles with computed losses
         n_train % Number of training points to start with
         n_test % Number of testing points
         lb % Lower bound for particle positions
@@ -28,8 +29,8 @@ classdef Bayes < Optimiser
                 nodes
                 adjacency
                 loss_fcn
-                options.n_train = 100
-                options.n_test = 10
+                options.n_train = 20
+                options.n_test = 5
                 options.lb
                 options.ub
                 options.sigma_f = 1
@@ -69,53 +70,59 @@ classdef Bayes < Optimiser
 %
 %           Generate training points
 %
-            obj.x_train = obj.lb + rand(obj.n_train, obj.n_params) .* (obj.ub - obj.lb);
+            obj.particles = repmat(struct('x', zeros(size(params)), ...
+                                          'loss', inf), ...
+                                   obj.n_train, 1);
+            obj.best_particle = obj.particles(1);
+            for p_i = 1 : obj.n_train
+                obj.particles(p_i).x = obj.lb + rand(1, obj.n_params) .* (obj.ub - obj.lb);
+            end
+            obj.n_computed = 0;
         end
 %
         function backward(obj)
 %
-%           Calculated number of currently computed points and update array
-%           size
-%
-            n_total = size(obj.x_train, 1);
-            n_computed = numel(obj.y_train);
-            n_new = n_total - n_computed;
-            obj.y_train = [obj.y_train;
-                           zeros(n_new, 1)];
-%
 %           Evaluate cost function at each new training point
 %
-            for train_idx = n_computed + 1 : n_total
-                obj.y_train(train_idx) = obj.loss_fcn(obj.x_train(train_idx, :));
+            for p_i = obj.n_computed + 1 : numel(obj.particles)
+                obj.particles(p_i).loss = obj.loss_fcn(obj.particles(p_i).x);
+            end
+%
+%           Global best update
+%
+            [~, min_idx] = min([obj.particles.loss]);
+            if obj.particles(min_idx).loss < obj.best_particle.loss
+                obj.best_particle = obj.particles(min_idx);
             end
         end
 %
         function step(obj)
 %
+%           Extract training variables
+%
+            x_train = cat(1, obj.particles.x);
+            y_train = cat(1, obj.particles.loss);
+%
 %           Compute training covariance matrix with added noise for
 %           numerical stability and inverse
-%
-            K_11 = obj.kernel(obj.x_train, obj.x_train);
+%        
+            K_11 = obj.kernel(x_train, x_train);
             K_11 = K_11 + 1e-6 * eye(size(K_11));
             K_11_inv = inv(K_11);
-%
-%           Calculate current minimum y from training points
-%
-            [~, y_min_idx] = min(obj.y_train);
 %
 %           Use multi point gradient descent on acquisition function
 %           to determine next training point
 %
             x_test = zeros(obj.n_test, obj.n_params);
             x_test(1 : end - 1, :) = obj.lb + rand(obj.n_test - 1, obj.n_params) .* (obj.ub - obj.lb);
-            x_test(end, :) = obj.x_train(y_min_idx, :);
+            x_test(end, :) = obj.best_particle.x;
             best_f_val = inf;
             for test_i = 1 : obj.n_test
-                [x, f_val] = adam_optim(@(x) obj.lower_confidence_bound(x, K_11_inv), ...
+                [x, f_val] = adam_optim(@(x) obj.lower_confidence_bound(x_train, x, y_train, K_11_inv), ...
                                         x_test(test_i, :), ...
                                         'lb', obj.lb, ...
                                         'ub', obj.ub, ...
-                                        'h', 0.01, ...
+                                        'h', 1, ...
                                         'max_iter', 1e3, ...
                                         'Display', false);
                 if f_val < best_f_val
@@ -126,7 +133,7 @@ classdef Bayes < Optimiser
 %
 %           Update training points
 %
-            obj.x_train = [obj.x_train; x_next];     
+            obj.particles(end + 1).x = x_next;     
         end
 %
         function K = kernel(obj, x1, x2)
@@ -145,11 +152,11 @@ classdef Bayes < Optimiser
             K = obj.sigma_f ^ 2 * exp(-0.5 * sqdist / obj.l ^ 2);
         end
 %
-        function [mu, K] = gp(obj, x_test, K_11_inv)
+        function [mu, K] = gp(obj, x_train, x_test, y_train, K_11_inv)
 %
 %           Compute the covariance between training and test data
 %
-            K_12 = obj.kernel(obj.x_train, x_test);
+            K_12 = obj.kernel(x_train, x_test);
 %
 %           Compute the covariance of the test data
 %
@@ -157,18 +164,18 @@ classdef Bayes < Optimiser
 %
 %           Mean prediction
 %
-            mu = K_12' * K_11_inv * obj.y_train;
+            mu = K_12' * K_11_inv * y_train;
 %
 %           Covariance prediction
 %
             K = K_22 - K_12' * K_11_inv * K_12;
         end
 %
-        function ei = expected_improvement(obj, x_test, f_min, K_11_inv)
+        function ei = expected_improvement(obj, x_train, x_test, y_train, f_min, K_11_inv)
 %
 %           Compute GP mean and covariance for the test points
 %
-            [mu, K] = obj.gp(x_test, K_11_inv);
+            [mu, K] = obj.gp(x_train, x_test, y_train, K_11_inv);
         
             % Standardize improvement
             u = (f_min - mu) ./ sqrt(diag(K));
@@ -177,14 +184,14 @@ classdef Bayes < Optimiser
             ei = (mu - f_min)' * mvncdf(u) - sqrt(diag(K))' * normpdf(u);
         end
 %
-        function lcb = lower_confidence_bound(obj, x_test, K_11_inv)
+        function lcb = lower_confidence_bound(obj, x_train, x_test, y_train, K_11_inv)
 %
 %           Compute GP mean and covariance for the test points
 %
-            [mu, K] = obj.gp(x_test, K_11_inv);
+            [mu, K] = obj.gp(x_train, x_test, y_train, K_11_inv);
             
             % Calculate lower confidence bound
-            lcb = mu - 3 * K;
+            lcb = mu - 2 * K;
         end
     end
 %

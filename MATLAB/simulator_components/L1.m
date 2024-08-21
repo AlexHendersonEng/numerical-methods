@@ -7,9 +7,9 @@
 classdef L1 < Component
 %
     properties
-        y
-        y_t
-        y_actual
+        y % Column vector of signals where each column is new signal
+        y_t % Column vector of signal time
+        y_actual % Interpolated signal at given time
     end
 %
     methods

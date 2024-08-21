@@ -34,7 +34,7 @@ classdef Noise < Component
 %
             obj.solver = solver;
             obj.input = input;
-            obj.output = obj.input + obj.mu + randn() * obj.sigma;
+            obj.output = obj.input + obj.mu + randn(size(obj.input)) * obj.sigma;
             obj.logger = obj.logger.log(obj);
         end
 %
@@ -42,7 +42,7 @@ classdef Noise < Component
 %
 %           Step forward in time calculating new output and logging data 
 %
-            obj.output = obj.input + obj.mu + randn() * obj.sigma;
+            obj.output = obj.input + obj.mu + randn(size(obj.input)) * obj.sigma;
             obj.logger = obj.logger.log(obj);
         end
 %

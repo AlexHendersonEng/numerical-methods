@@ -17,9 +17,12 @@ classdef Logger
 %
 %           Log data
 %
-            obj.t = [obj.t, component.solver.t];
-            obj.input = [obj.input, component.input];
-            obj.output = [obj.output, component.output];
+            obj.t = [obj.t;
+                     component.solver.t];
+            obj.input = [obj.input;
+                         component.input];
+            obj.output = [obj.output;
+                          component.output];
         end
     end
 %

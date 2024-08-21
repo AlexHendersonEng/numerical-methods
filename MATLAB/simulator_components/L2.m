@@ -7,9 +7,9 @@
 classdef L2 < Component
 %
     properties
-        y
-        y_t
-        y_actual
+        y % Column vector of signals where each column is new signal
+        y_t % Column vector of signal time
+        y_actual % Interpolated signal at given time
     end
 %
     methods
@@ -36,7 +36,7 @@ classdef L2 < Component
             obj.solver = solver;
             obj.input = input;
             obj.y_actual = interp1(obj.y_t, obj.y, obj.solver.t);
-            obj.output = 0.5 * (obj.y_actual - obj.input) ^ 2;
+            obj.output = 0.5 * (obj.y_actual - obj.input) .^ 2;
             obj.logger = obj.logger.log(obj);
         end
 %
@@ -45,7 +45,7 @@ classdef L2 < Component
 %           Step forward in time calculating new output and logging data 
 %
             obj.y_actual = interp1(obj.y_t, obj.y, obj.solver.t);
-            obj.output = (obj.y_actual - obj.input) ^ 2;
+            obj.output = (obj.y_actual - obj.input) .^ 2;
             obj.logger = obj.logger.log(obj);
         end
 %

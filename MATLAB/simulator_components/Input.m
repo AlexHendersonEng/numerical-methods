@@ -8,8 +8,8 @@
 classdef Input < Component
 %
     properties
-        u
-        u_t
+        u % Column vector of signals where each column is new signal
+        u_t % Column vector of signal time
     end
 %
     methods
@@ -36,7 +36,8 @@ classdef Input < Component
 %           logging initial values 
 %
             obj.solver = solver;
-            obj.output = interp1(obj.u_t, obj.u, obj.solver.t);
+            obj.input = obj.solver.t;
+            obj.output = interp1(obj.u_t, obj.u, obj.input);
             obj.logger = obj.logger.log(obj);
         end
 %

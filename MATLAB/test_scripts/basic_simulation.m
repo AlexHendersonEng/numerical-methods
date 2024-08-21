@@ -19,10 +19,10 @@ addpath(fullfile(path, '..', 'simulator_components'));
 % Inputs
 %
 h = 0.01;
-t = 0 : h : 10;
+t = (0 : h : 10)';
 solver = RK4(t(1), h);
-u = [0, 0, 1, 1];
-u_t = [0, 1, 1 + 1e-3, 10];
+u = [0, 0, 1, 1]';
+u_t = [0, 1, 1 + 1e-3, 10]';
 %
 % Set up graph
 %

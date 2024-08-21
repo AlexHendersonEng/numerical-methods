@@ -19,14 +19,23 @@ classdef Optimiser < handle
     methods
         function obj = Optimiser(nodes, adjacency)
 %
-%           Get number of nodes
+%           Initialise variables
 %
             obj.nodes = nodes;
             obj.adjacency = adjacency;
             obj.n_nodes = size(obj.adjacency, 1);
-            obj.grad = zeros(obj.n_nodes, 1);
-            obj.param_grad = zeros(obj.n_nodes, 1);
+            obj.grad = cell(obj.n_nodes, 1);
+            obj.param_grad = cell(obj.n_nodes, 1);
             obj.order = cell(obj.n_nodes, 2);
+%
+%           Initialise gradient and parameter gradient arrays
+%
+            for node_i = 1 : numel(obj.nodes)
+                n_inputs = numel(obj.nodes{node_i}.input);
+                obj.grad{node_i} = zeros(1, n_inputs);
+                n_params = numel(obj.nodes{node_i}.parameters());
+                obj.param_grad{node_i} = zeros(1, n_params);
+            end
 %
 %           Get propagation order
 %
@@ -85,6 +94,11 @@ classdef Optimiser < handle
 %
                 node_i = obj.order{prop_i, 1};
 %
+%               If node is an input there is no need to calculate
+%               derivatives
+%
+                if ~any(obj.adjacency(:, node_i)); continue; end
+%
 %               If no dependent nodes then it is an output node and the
 %               gradient should be the derivative of its output (the error)
 %               with respect to the input and there is no param to update
@@ -93,8 +107,8 @@ classdef Optimiser < handle
                 nodes_d = obj.order{prop_i, 2};
                 if isempty(nodes_d)
                     [dydx, ~] = obj.nodes{node_i}.derivative();
-                    obj.grad(node_i) = dydx;
-                    obj.param_grad(node_i) = 0;
+                    obj.grad{node_i} = dydx;
+                    obj.param_grad{node_i} = [];
                     continue
                 end
 %
@@ -103,7 +117,7 @@ classdef Optimiser < handle
 %
                 grad_sum = 0;
                 for node_d = nodes_d
-                    grad_sum = grad_sum + obj.grad(node_d);
+                    grad_sum = grad_sum + obj.grad{node_d};
                 end
 %
 %               Calculate gradient of error with respect to node input.
@@ -112,8 +126,9 @@ classdef Optimiser < handle
 %               which is the param gradient
 %
                 [dydx, dydp] = obj.nodes{node_i}.derivative();
-                obj.grad(node_i) = obj.grad(node_i) + grad_sum * dydx;
-                obj.param_grad(node_i) = obj.param_grad(node_i) + grad_sum * dydp;
+                obj.grad{node_i} = obj.grad{node_i} + grad_sum .* dydx;
+                if isempty(obj.param_grad{node_i}); continue; end
+                obj.param_grad{node_i} = obj.param_grad{node_i} + grad_sum .* dydp;
             end
         end
 %
@@ -122,8 +137,10 @@ classdef Optimiser < handle
         end
 %
         function zero_grad(obj)
-            obj.grad = zeros(obj.n_nodes, 1);
-            obj.param_grad = zeros(obj.n_nodes, 1);
+            for node_i = 1 : obj.n_nodes
+                obj.grad{node_i} = zeros(size(obj.grad{node_i}));
+                obj.param_grad{node_i} = zeros(size(obj.param_grad{node_i}));
+            end
         end
     end
 %

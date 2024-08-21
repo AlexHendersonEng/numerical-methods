@@ -1,6 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% advanced_optimisation script for optimising a surrogate model
+% multi_channel_advanced_optimisation script for optimising a surrogate
+% model
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -21,17 +22,19 @@ addpath(fullfile(path, '..', 'simulator_components'));
 h = 0.01;
 t = (0 : h : 10)';
 solver = RK4(t(1), h);
-u = [0, 0, 1, 1]';
+u = repmat([0, 0, 1, 1]', 1, 3);
 u_t = [0, 1, 1 + 1e-3, 10]';
 %
 % Set up 'black box' model
 %
 nodes = {Input(u, u_t), ...
-         Gain(2), ...
-         TF1(1, 0)};
-adjacency = [0, 1, 0;
-             0, 0, 1;
-             0, 0, 0];
+         Gain([2, 1.5, 2.5]), ...
+         TF1([1, 0.5, 1.5], [0, 0, 0]), ...
+         Add()};
+adjacency = [0, 1, 0, 0;
+             0, 0, 1, 0;
+             0, 0, 0, 1;
+             0, 0, 0, 0];
 %
 % Run 'black box' simulation
 %
@@ -49,13 +52,15 @@ y = sim_man.nodes{end}.logger.output;
 % Set up surrogate model
 %
 nodes = {Input(u, u_t), ...
-         Gain(1), ...
-         TF1(0.1, 0), ...
+         Gain([0.9, 1, 1.1]), ...
+         TF1([0.1, 0.2, 0.3], [0, 0, 0]), ...
+         Add(), ...
          L2(y, y_t)};
-adjacency = [0, 1, 0, 0;
-             0, 0, 1, 0;
-             0, 0, 0, 1;
-             0, 0, 0, 0];
+adjacency = [0, 1, 0, 0, 0;
+             0, 0, 1, 0, 0;
+             0, 0, 0, 1, 0;
+             0, 0, 0, 0, 1;
+             0, 0, 0, 0, 0];
 %
 % Optimise surrogate model
 %
@@ -64,8 +69,8 @@ sim_man = SimulationManager(nodes, adjacency, solver);
 optim = PSO(nodes, ...
             adjacency, ...
             @(x) loss_fcn(x, sim_man, t), ...
-            'lb', [0.1, 0.1], ...
-            'ub', [10, 10]);
+            'lb', repmat(0.1, 1, 6), ...
+            'ub', repmat(10, 1, 6));
 optim.backward()
 for iter = 1 : 50
     optim.step();

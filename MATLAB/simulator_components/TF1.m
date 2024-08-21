@@ -7,7 +7,7 @@
 classdef TF1 < Component
 %
     properties
-        tau;
+        tau % Row vector of time constants
     end
 %
     methods
@@ -41,7 +41,7 @@ classdef TF1 < Component
 %
 %           Step forward in time calculating new output and logging data 
 %
-            dydt = @(t, y) (1 / obj.tau) * (obj.input - y);
+            dydt = @(t, y) (1 ./ obj.tau) .* (obj.input - y);
             obj.output = obj.solver.step(@(t, y) dydt(t, y), obj.output);
             obj.logger = obj.logger.log(obj);
         end
@@ -51,7 +51,7 @@ classdef TF1 < Component
 %           Calculate derivative of output with respect to input and param
 %
             dydx = 1;
-            dydp = (1 / obj.tau) * (obj.output - obj.input);
+            dydp = (1 ./ obj.tau) .* (obj.output - obj.input);
         end
 %
         function update(obj, param_update)

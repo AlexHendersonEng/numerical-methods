@@ -26,7 +26,7 @@ rng(0);
 %
 Fs = 100;                 
 T = 1 / Fs;     
-t = 0 : T : 10;
+t = (0 : T : 10)';
 u_t = t;
 u = randn(size(u_t));
 solver = RK4(t(1), T);

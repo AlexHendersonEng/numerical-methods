@@ -24,7 +24,7 @@ classdef GD < Optimiser
 %           Loop through nodes and update weights
 %
             for node_i = 1 : obj.n_nodes
-                param_update = -obj.h * obj.param_grad(node_i);
+                param_update = -obj.h * obj.param_grad{node_i};
                 obj.nodes{node_i}.update(param_update);
             end
         end
