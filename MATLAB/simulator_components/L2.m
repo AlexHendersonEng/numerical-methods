@@ -59,8 +59,8 @@ classdef L2 < Component
 %
 %           Calculate derivative of output with respect to input and param
 %
-            dydx = obj.input - obj.y_actual;
-            dydp = 0;
+            dydx = diag(obj.input - obj.y_actual);
+            dydp = [];
         end
     end
 end

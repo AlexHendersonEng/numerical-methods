@@ -57,6 +57,10 @@ classdef Adam < Optimiser
 %
             for node_i = 1 : obj.n_nodes
 %
+%               If node has no parameters then skip
+%
+                if isempty(obj.nodes{node_i}.parameters()); continue; end
+%
 %               Update biased first and second moment estimate
 %
                 obj.m{node_i} = obj.beta1 * obj.m{node_i} + (1 - obj.beta1) * obj.param_grad{node_i};

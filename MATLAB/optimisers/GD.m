@@ -40,6 +40,10 @@ classdef GD < Optimiser
 %
             for node_i = 1 : obj.n_nodes
 %
+%               If node has no parameters then skip
+%
+                if isempty(obj.nodes{node_i}.parameters()); continue; end
+%
 %               Calculate param update
 %
                 param = obj.nodes{node_i}.parameters();

@@ -56,8 +56,8 @@ classdef TF1 < Component
 %
 %           Calculate derivative of output with respect to input and param
 %
-            dydx = 1;
-            dydp = (1 ./ obj.tau) .* (obj.output - obj.input);
+            dydx = eye(numel(obj.input));
+            dydp = diag((1 ./ obj.tau) .* (obj.output - obj.input));
         end
 %
         function update(obj, param_update)
@@ -67,7 +67,7 @@ classdef TF1 < Component
             obj.tau = param_update;
         end
 %
-        function params =  parameters(obj)
+        function params = parameters(obj)
 %
 %           Return tunable parameters in array
 %

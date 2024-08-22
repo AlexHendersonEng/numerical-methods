@@ -37,7 +37,8 @@ classdef Optimiser < handle
 %
             for node_i = 1 : numel(obj.nodes)
                 n_inputs = numel(obj.nodes{node_i}.input);
-                obj.grad{node_i} = zeros(1, n_inputs);
+                n_outputs = numel(obj.nodes{node_i}.output);
+                obj.grad{node_i} = zeros(n_outputs, n_inputs);
 %
                 n_params = numel(obj.nodes{node_i}.parameters());
                 obj.param_grad{node_i} = zeros(1, n_params);
@@ -144,9 +145,9 @@ classdef Optimiser < handle
 %               which is the param gradient
 %
                 [dydx, dydp] = obj.nodes{node_i}.derivative();
-                obj.grad{node_i} = obj.grad{node_i} + grad_sum .* dydx;
+                obj.grad{node_i} = obj.grad{node_i} + grad_sum * dydx;
                 if isempty(obj.param_grad{node_i}); continue; end
-                obj.param_grad{node_i} = obj.param_grad{node_i} + grad_sum .* dydp;
+                obj.param_grad{node_i} = obj.param_grad{node_i} + sum(grad_sum * dydp, 1);
             end
         end
 %

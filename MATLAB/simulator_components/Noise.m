@@ -70,12 +70,12 @@ classdef Noise < Component
             obj.logger = obj.logger.log(obj);
         end
 %
-        function [dydx, dydp] = derivative(~)
+        function [dydx, dydp] = derivative(obj)
 %
 %           Calculate derivate of output with respect to input and param
 %
-            dydx = 1;
-            dydp = 0;
+            dydx = eye(numel(obj.input));
+            dydp = [];
         end
 %
         function reset(obj)

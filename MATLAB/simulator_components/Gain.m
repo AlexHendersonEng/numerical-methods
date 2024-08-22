@@ -52,8 +52,8 @@ classdef Gain < Component
 %
 %           Calculate derivate of output with respect to input and param
 %
-            dydx = obj.gain;
-            dydp = obj.input;
+            dydx = diag(obj.gain);
+            dydp = diag(obj.input);
         end
 %
         function update(obj, param_update)
@@ -63,7 +63,7 @@ classdef Gain < Component
             obj.gain = param_update;
         end
 %
-        function params =  parameters(obj)
+        function params = parameters(obj)
 %
 %           Return tunable parameters in array
 %
