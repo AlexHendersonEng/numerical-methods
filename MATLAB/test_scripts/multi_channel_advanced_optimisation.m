@@ -82,10 +82,10 @@ end
 %
 x = optim.best_particle.x;
 for node_i = 1 : numel(sim_man.nodes)
-    params = sim_man.nodes{node_i}.parameters();
-    param_update = x(1 : numel(params)) - params;
+    param = sim_man.nodes{node_i}.parameters();
+    param_update = x(1 : numel(param));
     sim_man.nodes{node_i}.update(param_update);
-    x(1 : numel(params)) = [];
+    x(1 : numel(param)) = [];
 end
 %
 % Plot 'black box' outputs vs surrogate
@@ -119,10 +119,10 @@ function loss = loss_fcn(x, sim_man, t)
 %   Initialise nodes
 %
     for node_i = 1 : numel(sim_man.nodes)
-        params = sim_man.nodes{node_i}.parameters();
-        param_update = x(1 : numel(params)) - params;
+        param = sim_man.nodes{node_i}.parameters();
+        param_update = x(1 : numel(param));
         sim_man.nodes{node_i}.update(param_update);
-        x(1 : numel(params)) = [];
+        x(1 : numel(param)) = [];
     end
 %
 %   Reset simulation

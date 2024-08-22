@@ -16,24 +16,26 @@ classdef Adam < Optimiser
     end
 %
     methods
-        function obj = Adam(nodes, adjacency, h, beta1, beta2)
+        function obj = Adam(nodes, adjacency, h, options)
 %
 %           Input handling
 %
             arguments
                 nodes
                 adjacency
-                h
-                beta1 = 0.9
-                beta2 = 0.999
+                h = 1e-3;
+                options.beta1 = 0.9;
+                options.beta2 = 0.999;
+                options.lb = [];
+                options.ub = [];
             end
 %
 %           Call super class instatiation method and assign variables
 %
-            obj = obj@Optimiser(nodes, adjacency);
+            obj = obj@Optimiser(nodes, adjacency, options.lb, options.ub);
             obj.h = h;
-            obj.beta1 = beta1;
-            obj.beta2 = beta2;
+            obj.beta1 = options.beta1;
+            obj.beta2 = options.beta2;
             obj.m = cell(obj.n_nodes, 1);
 %
 %           Initialise first and second moment estimates
@@ -45,6 +47,11 @@ classdef Adam < Optimiser
         end
 %
         function step(obj)
+%
+%           Initialise lower and upper bound arrays
+%
+            lb = obj.lb;
+            ub = obj.ub;
 %
 %           Loop through nodes and update params
 %
@@ -62,7 +69,15 @@ classdef Adam < Optimiser
 %
 %               Calculate param update
 %
-                param_update = -obj.h * m_hat ./ (sqrt(v_hat) + 1e-8);
+                param = obj.nodes{node_i}.parameters();
+                param_update = param - obj.h * m_hat ./ (sqrt(v_hat) + 1e-8);
+%
+%               Apply bounds
+%
+                n_param = numel(param);
+                param_update = min(max(param_update, lb(1 : n_param)), ub(1 : n_param));
+                lb(1 : n_param) = [];
+                ub(1 : n_param) = [];
 %
 %               Update node param
 %

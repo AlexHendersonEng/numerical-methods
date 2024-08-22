@@ -10,10 +10,7 @@ classdef GA < Optimiser
         loss_fcn % Cost function
         particles; % Particles struct
         best_particle % Best particle struct
-        n_params % Number of parameters
         pop_size % Number of particles in population
-        lb % Lower bound for particle positions
-        ub % Upper bound for particle positions
     end
 %
     methods
@@ -25,42 +22,26 @@ classdef GA < Optimiser
                 nodes
                 adjacency
                 loss_fcn
-                options.pop_size = 50
-                options.lb
-                options.ub
+                options.pop_size = 50;
+                options.lb = [];
+                options.ub = [];
             end
 %
 %           Call superclass constructor
 %
-            obj = obj@Optimiser(nodes, adjacency);
+            obj = obj@Optimiser(nodes, adjacency, options.lb, options.ub);
 %
 %           Assign variables
 %
             obj.loss_fcn = loss_fcn;
             obj.pop_size = options.pop_size;
-            obj.lb = options.lb;
-            obj.ub = options.ub;
 %
 %           Generate population
 %
-            params = [];
-            for node_i = 1 : numel(obj.nodes)
-                params = [params, obj.nodes{node_i}.parameters()];
-            end
-            obj.n_params = numel(params);
-            obj.particles = repmat(struct('x', zeros(size(params)), ...
+            obj.particles = repmat(struct('x', zeros(1, obj.n_params), ...
                                           'loss', inf), ...
                                    obj.pop_size, 1);
             obj.best_particle = obj.particles(1);
-%
-%           Generate bounds if required and assign maximum velocity
-%
-            if isempty(obj.lb)
-                obj.lb = repmat(-100, 1, obj.n_params);
-            end
-            if isempty(obj.ub)
-                obj.ub = repmat(100, 1, obj.n_params);
-            end
 %
 %           Give each particle a random starting position
 %

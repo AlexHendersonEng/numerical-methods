@@ -10,14 +10,17 @@ classdef Optimiser < handle
         nodes
         adjacency
         n_nodes
+        n_params = 0;
         grad
         param_grad
         order   % Column 1 is node index in propagation order
                 % Column 2 is column 1 node dependencies
+        lb
+        ub
     end
 %
     methods
-        function obj = Optimiser(nodes, adjacency)
+        function obj = Optimiser(nodes, adjacency, lb, ub)
 %
 %           Initialise variables
 %
@@ -27,14 +30,29 @@ classdef Optimiser < handle
             obj.grad = cell(obj.n_nodes, 1);
             obj.param_grad = cell(obj.n_nodes, 1);
             obj.order = cell(obj.n_nodes, 2);
+            obj.lb = lb;
+            obj.ub = ub;
 %
 %           Initialise gradient and parameter gradient arrays
 %
             for node_i = 1 : numel(obj.nodes)
                 n_inputs = numel(obj.nodes{node_i}.input);
                 obj.grad{node_i} = zeros(1, n_inputs);
+%
                 n_params = numel(obj.nodes{node_i}.parameters());
                 obj.param_grad{node_i} = zeros(1, n_params);
+%
+                obj.n_params = obj.n_params + n_params;
+            end
+%
+%           Generate bounds if required
+%
+            if isempty(obj.lb)
+                obj.lb = repmat(-100, 1, obj.n_params);
+            end
+%
+            if isempty(obj.ub)
+                obj.ub = repmat(100, 1, obj.n_params);
             end
 %
 %           Get propagation order

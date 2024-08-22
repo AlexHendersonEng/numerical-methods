@@ -8,14 +8,11 @@ classdef Bayes < Optimiser
 %
     properties
         loss_fcn % Cost function
-        n_params % Number of parameters
         particles; % Particles struct
         best_particle % Best particle struct
         n_computed % Number of particles with computed losses
         n_train % Number of training points to start with
         n_test % Number of testing points
-        lb % Lower bound for particle positions
-        ub % Upper bound for particle positions
         sigma_f % Gaussian process variance
         l % Gaussian process length scale
     end
@@ -29,48 +26,29 @@ classdef Bayes < Optimiser
                 nodes
                 adjacency
                 loss_fcn
-                options.n_train = 20
-                options.n_test = 5
-                options.lb
-                options.ub
-                options.sigma_f = 1
-                options.l = 1
+                options.n_train = 20;
+                options.n_test = 5;
+                options.lb = [];
+                options.ub = [];
+                options.sigma_f = 1;
+                options.l = 1;
             end
 %
 %           Call superclass constructor
 %
-            obj = obj@Optimiser(nodes, adjacency);
+            obj = obj@Optimiser(nodes, adjacency, options.lb, options.ub);
 %
 %           Assign variables
 %
             obj.loss_fcn = loss_fcn;
             obj.n_train = options.n_train;
             obj.n_test = options.n_test;
-            obj.lb = options.lb;
-            obj.ub = options.ub;
             obj.sigma_f = options.sigma_f;
             obj.l = options.l;
 %
-%           Calculate number of parameters
-%
-            params = [];
-            for node_i = 1 : numel(obj.nodes)
-                params = [params, obj.nodes{node_i}.parameters()];
-            end
-            obj.n_params = numel(params);
-%
-%           Generate bounds if required and assign maximum velocity
-%
-            if isempty(obj.lb)
-                obj.lb = repmat(-100, 1, obj.n_params);
-            end
-            if isempty(obj.ub)
-                obj.ub = repmat(100, 1, obj.n_params);
-            end
-%
 %           Generate training points
 %
-            obj.particles = repmat(struct('x', zeros(size(params)), ...
+            obj.particles = repmat(struct('x', zeros(1, obj.n_params), ...
                                           'loss', inf), ...
                                    obj.n_train, 1);
             obj.best_particle = obj.particles(1);

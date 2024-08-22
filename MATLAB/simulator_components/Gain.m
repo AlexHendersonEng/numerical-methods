@@ -54,7 +54,7 @@ classdef Gain < Component
 %
 %           Update param
 %
-            obj.gain = obj.gain + param_update;
+            obj.gain = param_update;
         end
 %
         function params =  parameters(obj)

@@ -11,13 +11,10 @@ classdef PSO < Optimiser
         particles; % Particles struct
         particles_best; % Particles personal best struct
         best_particle % Best particle struct
-        n_params % Number of parameters
         w % Particle inertia
         c1 % Cognitive coefficient
         c2 % Social coefficient
         swarm_size % Number of particles in swarm
-        lb % Lower bound for particle positions
-        ub % Upper bound for particle positions
         v_max % Maximum velocity for particles
     end
 %
@@ -30,17 +27,17 @@ classdef PSO < Optimiser
                 nodes
                 adjacency
                 loss_fcn
-                options.w = 0.5
-                options.c1 = 2
-                options.c2 = 2
-                options.swarm_size = 10
-                options.lb
-                options.ub
+                options.w = 0.5;
+                options.c1 = 2;
+                options.c2 = 2;
+                options.swarm_size = 10;
+                options.lb = [];
+                options.ub = [];
             end
 %
 %           Call superclass constructor
 %
-            obj = obj@Optimiser(nodes, adjacency);
+            obj = obj@Optimiser(nodes, adjacency, options.lb, options.ub);
 %
 %           Assign variables
 %
@@ -49,31 +46,18 @@ classdef PSO < Optimiser
             obj.c1 = options.c1;
             obj.c2 = options.c2;
             obj.swarm_size = options.swarm_size;
-            obj.lb = options.lb;
-            obj.ub = options.ub;
 %
 %           Generate swarm
 %
-            params = [];
-            for node_i = 1 : numel(obj.nodes)
-                params = [params, obj.nodes{node_i}.parameters()];
-            end
-            obj.n_params = numel(params);
-            obj.particles = repmat(struct('x', zeros(size(params)), ...
-                                          'v', zeros(size(params)), ...
+            obj.particles = repmat(struct('x', zeros(1, obj.n_params), ...
+                                          'v', zeros(1, obj.n_params), ...
                                           'loss', inf), ...
                                    obj.swarm_size, 1);
             obj.particles_best = obj.particles;
             obj.best_particle = obj.particles(1);
 %
-%           Generate bounds if required and assign maximum velocity
+%           Assign maximum velocity
 %
-            if isempty(obj.lb)
-                obj.lb = repmat(-100, 1, obj.n_params);
-            end
-            if isempty(obj.ub)
-                obj.ub = repmat(100, 1, obj.n_params);
-            end
             obj.v_max = 0.1 * norm(obj.ub - obj.lb);
 %
 %           Give each particle a random starting position

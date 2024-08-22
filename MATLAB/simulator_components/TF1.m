@@ -58,7 +58,7 @@ classdef TF1 < Component
 %
 %           Update param
 %
-            obj.tau = obj.tau + param_update;
+            obj.tau = param_update;
         end
 %
         function params =  parameters(obj)
