@@ -126,30 +126,17 @@ classdef SimulationManager < handle
 %
 %           Call termination method on all nodes
 %
-            for node = 1 : obj.n_nodes
-                obj.nodes{node}.terminate();
+            for node_i = 1 : obj.n_nodes
+                obj.nodes{node_i}.terminate();
             end
         end
 %
         function reset(obj)
 %
-%           Reset nodes
+%           Call reset method on all nodes
 %
             for node_i = 1 : obj.n_nodes
-%
-%               Get first input and output
-%
-                t = obj.nodes{node_i}.logger.t(1);
-                input = obj.nodes{node_i}.logger.input(1, :);
-                output = obj.nodes{node_i}.logger.output(1, :);
-%
-%               Update nodes
-%
-                obj.nodes{node_i}.input = input;
-                obj.nodes{node_i}.output = output;
-                obj.nodes{node_i}.logger.t = t;
-                obj.nodes{node_i}.logger.input = input;
-                obj.nodes{node_i}.logger.output = output;
+                obj.nodes{node_i}.reset();
             end
         end
 %

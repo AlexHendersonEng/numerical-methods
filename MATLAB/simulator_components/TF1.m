@@ -21,9 +21,15 @@ classdef TF1 < Component
                 ic
                 logging = true
             end
+%
+%           Call super class instatiator
+%
+            obj = obj@Component(logging);
+%
+%           Assign variables
+%
             obj.tau = tau;
             obj.output = ic;
-            obj.logging = logging;
         end
 %
         function initialise(obj, solver, input)

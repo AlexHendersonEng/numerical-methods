@@ -84,6 +84,23 @@ classdef Component < handle
 %
             params = [];
         end
+%
+        function reset(obj)
+%
+%           Get initial time, input and output
+%
+            t_init = obj.logger.t(1);
+            input_init = obj.logger.input(1, :);
+            output_init = obj.logger.output(1, :);
+%
+%           Reset compoenent
+%
+            obj.input = input_init;
+            obj.output = output_init;
+            obj.logger.t = t_init;
+            obj.logger.input = input_init;
+            obj.logger.output = output_init;
+        end
     end
 %
 end

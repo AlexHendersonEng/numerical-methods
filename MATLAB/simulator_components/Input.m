@@ -24,10 +24,16 @@ classdef Input < Component
                 u_t
                 logging = true
             end
+%
+%           Call super class instatiator
+%
+            obj = obj@Component(logging);
+%
+%           Assign variables
+%
             obj.u = u;
             obj.u_t = u_t;
             obj.input = 0;
-            obj.logging = logging;
         end
 %
         function initialise(obj, solver, ~)

@@ -23,9 +23,15 @@ classdef L1 < Component
                 y_t
                 logging = true
             end
+%
+%           Call super class instatiator
+%
+            obj = obj@Component(logging);
+%
+%           Assign variables
+%
             obj.y = y;
             obj.y_t = y_t;
-            obj.logging = logging;
         end
 %
         function initialise(obj, solver, input)

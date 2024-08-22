@@ -19,8 +19,14 @@ classdef Gain < Component
                 gain
                 logging = true
             end
+%
+%           Call super class instatiator
+%
+            obj = obj@Component(logging);
+%
+%           Assign variables
+%
             obj.gain = gain;
-            obj.logging = logging;
         end
 %
         function initialise(obj, solver, input)
