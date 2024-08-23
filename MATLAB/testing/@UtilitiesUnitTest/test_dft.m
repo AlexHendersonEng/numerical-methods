@@ -8,7 +8,7 @@ function test_dft(test_case)
 %
 %   Time varying signal
 %
-    Fs = 1e4;                 
+    Fs = 1e3;                 
     T = 1 / Fs;     
     t = (0 : T : 1)';
     omega = 100;
