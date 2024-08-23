@@ -22,7 +22,7 @@ classdef Solver < handle
 %
         update(obj);
 %
-        step(obj, ode_fun, y0);
+        y = step(obj, ode_fun, y0);
     end
 %
 end
