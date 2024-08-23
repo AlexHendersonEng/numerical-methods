@@ -5,16 +5,16 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function root = newton_raphson(f, x0, tol, max_iter, h)
+function root = newton_raphson(f, x0, options)
 %
 %   Input validation
 %
     arguments
         f
         x0
-        tol = 1e-6
-        max_iter = 100
-        h = 1e-6
+        options.tol = 1e-6
+        options.max_iter = 100
+        options.dx = 1e-6
     end
 %
 %   Initial setup
@@ -24,7 +24,7 @@ function root = newton_raphson(f, x0, tol, max_iter, h)
 %
 %   Solve loop
 %
-    while iter < max_iter
+    while iter < options.max_iter
 %
 %       Calculate the function value at the current guess
 %
@@ -32,7 +32,7 @@ function root = newton_raphson(f, x0, tol, max_iter, h)
 %
 %       Approximate the derivative using finite difference
 %
-        dfx = (f(x + h) - f(x - h)) / (2 * h);
+        dfx = (f(x + options.dx) - f(x - options.dx)) / (2 * options.dx);
 %        
 %       Check if the derivative is zero to avoid division by zero
 %
@@ -46,7 +46,7 @@ function root = newton_raphson(f, x0, tol, max_iter, h)
 %
 %       Check if the change is within the tolerance
 %
-        if abs(x_new - x) < tol
+        if abs(x_new - x) < options.tol
             root = x_new;
             return;
         end
