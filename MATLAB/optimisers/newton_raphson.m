@@ -10,21 +10,20 @@ function root = newton_raphson(f, x0, options)
 %   Input validation
 %
     arguments
-        f
-        x0
+        f % Column vector of functions
+        x0 % Column vector of variables (size(f) == size(x0))
         options.tol = 1e-6
         options.max_iter = 100
-        options.dx = 1e-6
+        options.Display = true
     end
 %
 %   Initial setup
 %
     x = x0;
-    iter = 0;
 %
 %   Solve loop
 %
-    while iter < options.max_iter
+    for iter = 1 : options.max_iter
 %
 %       Calculate the function value at the current guess
 %
@@ -32,7 +31,12 @@ function root = newton_raphson(f, x0, options)
 %
 %       Approximate the derivative using finite difference
 %
-        dfx = (f(x + options.dx) - f(x - options.dx)) / (2 * options.dx);
+        dfx = zeros(numel(x), numel(x));
+        for x_i = 1 : numel(x)
+            dx = zeros(size(x));
+            dx(x_i) = 1e-6;
+            dfx(:, x_i) = (f(x + dx) - fx) / 1e-6;
+        end
 %        
 %       Check if the derivative is zero to avoid division by zero
 %
@@ -42,11 +46,17 @@ function root = newton_raphson(f, x0, options)
 %
 %       Calculate the next guess using the Newton-Raphson formula
 %
-        x_new = x - fx / dfx;
+        x_new = x - dfx \ fx;
+%
+%       Command window output
+%
+        if options.Display
+            disp("Iter: " + num2str(iter) + ", x: " + num2str(x_new));
+        end
 %
 %       Check if the change is within the tolerance
 %
-        if abs(x_new - x) < options.tol
+        if norm(x_new - x) < options.tol
             root = x_new;
             return;
         end
@@ -54,7 +64,6 @@ function root = newton_raphson(f, x0, options)
 %       Update the current guess and increment the iteration count
 %
         x = x_new;
-        iter = iter + 1;
     end
 %
 %   If max iterations are reached without convergence
