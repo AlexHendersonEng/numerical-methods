@@ -5,7 +5,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-classdef OptimiserUnitTest < matlab.unittest.TestCase
+classdef OptimisersUnitTest < matlab.unittest.TestCase
 %
     methods (TestClassSetup)
         add_paths(test_case);
