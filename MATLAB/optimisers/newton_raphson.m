@@ -13,8 +13,9 @@ function root = newton_raphson(f, x0, options)
         f % Column vector of functions
         x0 % Column vector of variables (size(f) == size(x0))
         options.tol = 1e-6
+        options.dx = 1e-6
         options.max_iter = 100
-        options.Display = true
+        options.display = true
     end
 %
 %   Initial setup
@@ -34,8 +35,8 @@ function root = newton_raphson(f, x0, options)
         dfx = zeros(numel(x), numel(x));
         for x_i = 1 : numel(x)
             dx = zeros(size(x));
-            dx(x_i) = 1e-6;
-            dfx(:, x_i) = (f(x + dx) - fx) / 1e-6;
+            dx(x_i) = options.dx;
+            dfx(:, x_i) = (f(x + dx) - fx) / options.dx;
         end
 %        
 %       Check if the derivative is zero to avoid division by zero
@@ -50,7 +51,7 @@ function root = newton_raphson(f, x0, options)
 %
 %       Command window output
 %
-        if options.Display
+        if options.display
             disp("Iter: " + num2str(iter) + ", x: " + num2str(x_new));
         end
 %

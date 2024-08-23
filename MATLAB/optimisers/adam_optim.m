@@ -13,11 +13,12 @@ function [x, f_val] = adam_optim(f, x0, options)
         x0
         options.max_iter = 100
         options.h = 1e-3
+        options.dx = 1e-6
         options.beta1 = 0.9
         options.beta2 = 0.999
         options.lb = repmat(-100, size(x0))
         options.ub = repmat(100, size(x0))
-        options.Display = true
+        options.display = true
     end
 %
 %   Initial setup
@@ -37,8 +38,8 @@ function [x, f_val] = adam_optim(f, x0, options)
         dfx = zeros(size(x));
         for x_i = 1 : numel(x)
             dx = zeros(size(x));
-            dx(x_i) = 1e-6;
-            dfx(x_i) = (f(x + dx) - fx) / 1e-6;
+            dx(x_i) = options.dx;
+            dfx(x_i) = (f(x + dx) - fx) / options.dx;
         end
 %
 %       Update biased first and second moment estimate
@@ -68,7 +69,7 @@ function [x, f_val] = adam_optim(f, x0, options)
 %
 %       Command window output
 %
-        if options.Display
+        if options.display
             disp("Iter: " + num2str(iter) + ", f_val: " + num2str(f_val));
         end
     end

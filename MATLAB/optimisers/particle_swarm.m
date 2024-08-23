@@ -19,7 +19,7 @@ function [x, f_val] = particle_swarm(f, n_vars, options)
         options.swarm_size = 100
         options.lb = repmat(-100, size(1, n_vars))
         options.ub = repmat(100, size(1, n_vars))
-        options.Display = true
+        options.display = true
     end
 %
 %   Initial setup
@@ -96,7 +96,7 @@ function [x, f_val] = particle_swarm(f, n_vars, options)
 %
 %       Command window output
 %
-        if options.Display
+        if options.display
             disp("Iter: " + num2str(iter) + ", f_val: " + num2str(f_val));
         end
     end
