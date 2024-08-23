@@ -53,7 +53,7 @@ function [x, f_val] = adam_optim(f, x0, options)
 %
 %       Calculate param update
 %
-        x = x - options.h * m_hat / (sqrt(v_hat) + 1e-8);
+        x = x - options.h * m_hat ./ (sqrt(v_hat) + 1e-8);
 %
 %       Apply bounds
 %
