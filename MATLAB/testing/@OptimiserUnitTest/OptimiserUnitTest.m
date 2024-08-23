@@ -17,6 +17,12 @@ classdef OptimiserUnitTest < matlab.unittest.TestCase
 %
     methods (Test)
         test_adam_optim(test_case);
+%
+        test_gradient_descent(test_case);
+%
+        test_particle_swarm(test_case);
+%
+        test_newton_raphson(test_case);
     end
 %
 end
