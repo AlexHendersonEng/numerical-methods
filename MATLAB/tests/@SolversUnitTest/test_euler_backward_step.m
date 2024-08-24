@@ -1,17 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% test_euler_forward_step method for testing the step method of the Euler
-% forward class
+% test_euler_backward_step method for testing the step method of the Euler
+% backward class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function test_euler_forward_step(test_case)
+function test_euler_backward_step(test_case)
 %
-%   Instantiate Euler forward class
+%   Instantiate Euler backward class
 %
     t0 = 0;
     h = 0.01;
-    solver = EulerForward(t0, h);
+    solver = EulerBackward(t0, h);
 %
 %   Define ode function and initial states
 %
@@ -22,7 +22,8 @@ function test_euler_forward_step(test_case)
 %
 %   Calculate expected output
 %
-    y_expected = y0 + h * dydt(t0, y0);
+    f = @(y) y0 - y + h * ode_fun(t0 + h, y);
+    y_expected = newton_raphson(@(y) f(y), y0);
 %
 %   Call step method
 %
