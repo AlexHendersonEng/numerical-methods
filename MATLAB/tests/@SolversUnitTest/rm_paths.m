@@ -10,6 +10,7 @@ function rm_paths(~)
     file_path = mfilename('fullpath');
     [path, ~, ~] = fileparts(file_path);
     rmpath(fullfile(path, '..', '..', 'solvers'));
+    rmpath(fullfile(path, '..', '..', 'optimisers'));
 %
 end
 %

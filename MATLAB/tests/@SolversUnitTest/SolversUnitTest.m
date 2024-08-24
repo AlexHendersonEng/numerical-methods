@@ -19,6 +19,12 @@ classdef SolversUnitTest < matlab.unittest.TestCase
         test_solver_instantiation(test_case);
 %
         test_solver_update(test_case);
+%
+        test_euler_forward_step(test_case);
+%
+        test_euler_backward_step(test_case);
+%
+        test_RK4_step(test_case);
     end
 %
 end

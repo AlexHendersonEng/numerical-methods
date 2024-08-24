@@ -22,8 +22,9 @@ function test_euler_backward_step(test_case)
 %
 %   Calculate expected output
 %
-    f = @(y) y0 - y + h * ode_fun(t0 + h, y);
-    y_expected = newton_raphson(@(y) f(y), y0);
+    f = @(y) y0 - y + h * dydt(t0 + h, y);
+    y_expected = newton_raphson(@(y) f(y), y0, ...
+                                'display', false);
 %
 %   Call step method
 %

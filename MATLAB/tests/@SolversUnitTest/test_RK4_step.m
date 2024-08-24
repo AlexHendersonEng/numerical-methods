@@ -21,10 +21,10 @@ function test_RK4_step(test_case)
 %
 %   Calculate expected output
 %
-    k1 = ode_fun(t0, y0);
-    k2 = ode_fun(t0 + 0.5 * h, y0 + h * 0.5 * k1);
-    k3 = ode_fun(t0 + 0.5 * h, y0 + h * 0.5 * k2);
-    k4 = ode_fun(t0 + h, y0 + h * k3);
+    k1 = dydt(t0, y0);
+    k2 = dydt(t0 + 0.5 * h, y0 + h * 0.5 * k1);
+    k3 = dydt(t0 + 0.5 * h, y0 + h * 0.5 * k2);
+    k4 = dydt(t0 + h, y0 + h * k3);
     y_expected = y0 + (h / 6) * (k1 + 2 * k2 + 2 * k3 + k4);
 %
 %   Call step method

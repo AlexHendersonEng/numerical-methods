@@ -10,6 +10,7 @@ function add_paths(~)
     file_path = mfilename('fullpath');
     [path, ~, ~] = fileparts(file_path);
     addpath(fullfile(path, '..', '..', 'solvers'));
+    addpath(fullfile(path, '..', '..', 'optimisers'));
 %
 end
 %

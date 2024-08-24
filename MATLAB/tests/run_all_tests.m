@@ -25,7 +25,9 @@ end
 %
 % Run tests
 %
-results = runtests(test_array);
+results = runtests(test_array, ...
+                   'OutputDetail', 'Verbose');
+disp(results);
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % End
