@@ -52,7 +52,7 @@ function root = newton_raphson(f, x0, options)
 %       Command window output
 %
         if options.display
-            disp("Iter: " + num2str(iter) + ", x: " + num2str(x_new));
+            disp("Iter: " + num2str(iter) + ", x: " + num2str(x_new'));
         end
 %
 %       Check if the change is within the tolerance
