@@ -10,7 +10,7 @@ classdef Tensor < handle
     properties
         value double
         local_grad cell;
-        grad double = 0
+        grad double
         mode char
     end
 %
@@ -28,6 +28,7 @@ classdef Tensor < handle
 %
             obj.value = value;
             obj.mode = options.mode;
+            obj.grad = zeros(size(obj.value));
         end
 %
         c = uplus(a);
