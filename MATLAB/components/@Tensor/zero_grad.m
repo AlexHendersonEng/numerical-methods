@@ -9,7 +9,7 @@ function zero_grad(obj)
 %
 %   Zero gradient of current tensor
 %
-    obj.grad = 0;
+    obj.grad = zeros(size(obj.value));
 %
 %   Call zero gradient on all tensors higher up in computational graph 
 %
