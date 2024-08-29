@@ -11,6 +11,13 @@ function c = times(a, b)
 %
     if isa(a, 'Tensor') && isa(b, 'Tensor')
 %
+%       If a and b are the same tensor
+%
+        if a == b
+            c = a .^ 2;
+            return
+        end
+%
 %       Throw error if both tensors do not have some propagation mode
 %
         if ~strcmpi(a.mode, b.mode)

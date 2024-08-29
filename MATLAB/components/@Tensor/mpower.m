@@ -12,12 +12,12 @@ function c = mpower(a, b)
 %
 %   Assign local gradients
 %
-    n = size(A, 1);
+    n = size(a.value, 1);
     dcda = zeros(n ^ 2, n ^ 2);
     for m = 0 : (b - 1)
-        Am = A ^ m;
-        Akm = A ^ (b - 1 - m);
-        dcda = dcda + kron(Am, Akm');
+        am = a.value ^ m;
+        akm = a.value ^ (b - 1 - m);
+        dcda = dcda + kron(am, akm');
     end
     if strcmpi(a.mode, 'forward')
         a.local_grad(end + 1, :) = {c, dcda};
