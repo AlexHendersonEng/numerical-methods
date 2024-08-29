@@ -13,7 +13,7 @@ function test_particle_swarm(test_case)
 %
 %   Set random number generator seed
 %
-rng(0);
+    rng(0);
 %
 %   Optimise
 %
