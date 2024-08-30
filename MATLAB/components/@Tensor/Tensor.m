@@ -57,7 +57,7 @@ classdef Tensor < handle
 %
         c = ctranspose(a);
 %
-        compute_grad(obj, grad);
+        backward(obj, grad);
 %
         zero_grad(obj);
 %

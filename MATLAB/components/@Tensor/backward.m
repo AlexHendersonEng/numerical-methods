@@ -1,10 +1,10 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% Tensor compute_grad method for performing propagation of gradients
+% Tensor backward method for performing back propagation of gradients
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function compute_grad(obj, grad)
+function backward(obj, grad)
 %
 %   Input handling
 %
@@ -21,7 +21,7 @@ function compute_grad(obj, grad)
 %
     grad_vec = reshape(obj.grad, [], 1);
 %
-%   Propagate
+%   Back propagate
 %
     for var_idx = 1 : size(obj.local_grad, 1)
 %
@@ -34,9 +34,9 @@ function compute_grad(obj, grad)
         local_grad = obj.local_grad{var_idx, 2}' * grad_vec;
         tensor.grad = tensor.grad + reshape(local_grad, size(tensor.value));
 %
-%       Propagate
+%       Back propagate
 %
-        tensor.compute_grad(tensor.grad);
+        tensor.backward(tensor.grad);
     end
 end
 %
