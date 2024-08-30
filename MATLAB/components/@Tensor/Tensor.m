@@ -11,7 +11,7 @@ classdef Tensor < handle
         value double
         local_grad cell;
         grad double = 0
-        no_grad boolean
+        no_grad
     end
 %
     methods

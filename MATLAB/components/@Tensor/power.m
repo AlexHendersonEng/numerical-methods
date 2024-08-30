@@ -11,6 +11,10 @@ function c = power(a, b)
 %
     c = Tensor(a.value .^ b);
 %
+%   Return if no gradient tracking
+%
+    if a.no_grad; return; end
+%
 %   Assign local gradients
 %
     dcda = b * diag(reshape(a.value, [], 1)) .^ (b - 1);

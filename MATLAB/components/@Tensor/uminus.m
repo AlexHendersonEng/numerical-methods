@@ -10,6 +10,10 @@ function c = uminus(a)
 %
     c = Tensor(-a.value);
 %
+%   Return if no gradient tracking
+%
+    if a.no_grad; return; end
+%
 %   Assign local gradients
 %
     dcda = -eye(numel(a.value));

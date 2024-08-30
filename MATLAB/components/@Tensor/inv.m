@@ -10,6 +10,10 @@ function c = inv(a)
 %
     c = Tensor(inv(a.value));
 %
+%   Return if no gradient tracking
+%
+    if a.no_grad; return; end
+%
 %   Assign local gradients
 %
     dcda = -kron(c.value, c.value');

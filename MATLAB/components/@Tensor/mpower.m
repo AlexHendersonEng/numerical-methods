@@ -10,6 +10,10 @@ function c = mpower(a, b)
 %
     c = Tensor(a.value ^ b);
 %
+%   Return if no gradient tracking
+%
+    if a.no_grad; return; end
+%
 %   Assign local gradients
 %
     n = size(a.value, 1);

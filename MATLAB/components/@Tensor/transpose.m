@@ -10,6 +10,10 @@ function c = transpose(a)
 %
     c = Tensor(a.value.');
 %
+%   Return if no gradient tracking
+%
+    if a.no_grad; return; end
+%
 %   Assign local gradients
 %
     n = size(a.value, 1);

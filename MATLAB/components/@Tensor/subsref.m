@@ -8,9 +8,13 @@ function b = subsref(a, s)
 %
 %   Subscripted reference implementation
 %
-    switch s.type
+    switch s(1).type
         case '.'
-            b = a.(s.subs);
+            try
+                b = builtin('subsref', a, s);
+            catch
+                builtin('subsref', a, s);
+            end
         case '()'
             b = a.value(s.subs{:});
         case '{}'

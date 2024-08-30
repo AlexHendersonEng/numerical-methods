@@ -21,12 +21,22 @@ function c = minus(a, b)
 %
         c = Tensor(a.value - b.value);
 %
+%       Return if no gradient tracking
+%
+        if a.no_grad && b.no_grad; return; end
+%
 %       Assign local gradients
 %
         dcda = eye(numel(a.value));
         dcdb = -eye(numel(a.value));
-        c.local_grad(end + 1 : end + 2, :) = {a, dcda;
-                                              b, dcdb};
+        if a.no_grad
+            c.local_grad(end + 1, :) = {a, dcdb};
+        elseif b.no_grad
+            c.local_grad(end + 1, :) = {b, dcda};
+        else
+            c.local_grad(end + 1 : end + 2, :) = {a, dcda;
+                                                  b, dcdb};
+        end
 %
 %   Else if only a is a tensor
 %
@@ -35,6 +45,10 @@ function c = minus(a, b)
 %       Compute resulting tensor
 %
         c = Tensor(a.value - b);
+%
+%       Return if no gradient tracking
+%
+        if a.no_grad; return; end
 %
 %       Assign local gradients
 %
@@ -48,6 +62,10 @@ function c = minus(a, b)
 %       Compute resulting tensor
 %
         c = Tensor(a - b.value);
+%
+%       Return if no gradient tracking
+%
+        if b.no_grad; return; end
 %
 %       Assign local gradients
 %
