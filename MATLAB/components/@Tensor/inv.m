@@ -8,16 +8,12 @@ function c = inv(a)
 %
 %   Compute resulting tensor
 %
-    c = Tensor(inv(a.value), 'mode', a.mode);
+    c = Tensor(inv(a.value));
 %
 %   Assign local gradients
 %
     dcda = -kron(c.value, c.value');
-    if strcmpi(a.mode, 'forward')
-        a.local_grad(end + 1, :) = {c, dcda};
-    else
-        c.local_grad(end + 1, :) = {a, dcda};
-    end
+    c.local_grad(end + 1, :) = {a, dcda};
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

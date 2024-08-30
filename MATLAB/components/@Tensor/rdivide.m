@@ -13,32 +13,20 @@ function c = rdivide(a, b)
 %       If a and b are the same tensor
 %
         if a == b
-            c = Tensor(ones(size(a.value)), 'mode', a.mode) + ...
-                zeros(size(a.value));
+            c = Tensor(ones(size(a.value))) + zeros(size(a.value));
             return
-        end
-%
-%       Throw error if both tensors do not have some propagation mode
-%
-        if ~strcmpi(a.mode, b.mode)
-            error('Tensor do not have same propagation mode');
         end
 %
 %       Compute resulting tensor
 %
-        c = Tensor(a.value ./ b.value, 'mode', a.mode);
+        c = Tensor(a.value ./ b.value);
 %
 %       Assign local gradients
 %
         dcda = diag(1 ./ reshape(b.value, [], 1));
         dcdb = diag(reshape(a.value, [], 1) ./ (reshape(b.value, [], 1)) .^ 2);
-        if strcmpi(a.mode, 'forward')
-            a.local_grad(end + 1, :) = {c, dcda};
-            b.local_grad(end + 1, :) = {c, dcdb};
-        else
-            c.local_grad(end + 1 : end + 2, :) = {a, dcda;
-                                                  b, dcdb};
-        end
+        c.local_grad(end + 1 : end + 2, :) = {a, dcda;
+                                              b, dcdb};
 %
 %   Else if only a is a tensor
 %
@@ -46,16 +34,12 @@ function c = rdivide(a, b)
 %
 %       Compute resulting tensor
 %
-        c = Tensor(a.value ./ b, 'mode', a.mode);
+        c = Tensor(a.value ./ b);
 %
 %       Assign local gradients
 %
         dcda = diag(1 ./ reshape(b, [], 1));
-        if strcmpi(a.mode, 'forward')
-            a.local_grad(end + 1, :) = {c, dcda};
-        else
-            c.local_grad(end + 1, :) = {a, dcda};
-        end
+        c.local_grad(end + 1, :) = {a, dcda};
 %
 %   Else only b is a tensor
 %
@@ -63,16 +47,12 @@ function c = rdivide(a, b)
 %
 %       Compute resulting tensor
 %
-        c = Tensor(a ./ b.value, 'mode', b.mode);
+        c = Tensor(a ./ b.value);
 %
 %       Assign local gradients
 %
         dcdb = diag(reshape(a, [], 1) ./ (reshape(b.value, [], 1)) .^ 2);
-        if strcmpi(b.mode, 'forward')
-            b.local_grad(end + 1, :) = {c, dcdb};
-        else
-            c.local_grad(end + 1, :) = {b, dcdb};
-        end
+        c.local_grad(end + 1, :) = {b, dcdb};
     end
 end
 %

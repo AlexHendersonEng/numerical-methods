@@ -8,16 +8,12 @@ function c = uminus(a)
 %
 %   Compute resulting tensor
 %
-    c = Tensor(-a.value, 'mode', a.mode);
+    c = Tensor(-a.value);
 %
 %   Assign local gradients
 %
     dcda = -eye(numel(a.value));
-    if strcmpi(a.mode, 'forward')
-        a.local_grad(end + 1, :) = {c, dcda};
-    else
-        c.local_grad(end + 1, :) = {a, dcda};
-    end
+    c.local_grad(end + 1, :) = {a, dcda};
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

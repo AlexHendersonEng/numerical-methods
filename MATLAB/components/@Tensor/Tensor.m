@@ -10,25 +10,21 @@ classdef Tensor < handle
     properties
         value double
         local_grad cell;
-        grad double
-        mode char
+        grad double = 0
     end
 %
     methods
-        function obj = Tensor(value, options)
+        function obj = Tensor(value)
 %
 %           Input handling
 %
             arguments
                 value
-                options.mode {mustBeMember(options.mode, {'forward', 'backward'})} = 'backward'
             end
 %
 %           Assign values
 %
             obj.value = value;
-            obj.mode = options.mode;
-            obj.grad = zeros(size(obj.value));
         end
 %
         c = uplus(a);
