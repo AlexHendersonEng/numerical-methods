@@ -18,6 +18,7 @@ function [x, f_val] = gradient_descent(f, x0, options)
         options.lb = repmat(-100, size(x0))
         options.ub = repmat(100, size(x0))
         options.display = true
+        options.jacobian
     end
 %
 %   Initial setup
@@ -30,13 +31,23 @@ function [x, f_val] = gradient_descent(f, x0, options)
 %
     for iter = 1 : options.max_iter
 %
-%       Approximate the derivative using finite difference
+%       Get derivative
 %
-        dfx = zeros(size(x));
-        for x_i = 1 : numel(x)
-            dx = zeros(size(x));
-            dx(x_i) = options.dx;
-            dfx(x_i) = (f(x + dx) - fx) / options.dx;
+        if isempty(options.jacobian)
+%
+%           Approximate the derivative using finite difference
+%
+            dfx = zeros(size(x));
+            for x_i = 1 : numel(x)
+                dx = zeros(size(x));
+                dx(x_i) = options.dx;
+                dfx(x_i) = (f(x + dx) - fx) / options.dx;
+            end
+        else
+%
+%           Get derivative using jacobian function
+%
+            dfx = options.jacobian(x);
         end
 %
 %       Calculate the next guess using the Newton-Raphson formula
