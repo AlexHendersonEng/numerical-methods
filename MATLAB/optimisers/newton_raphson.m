@@ -16,7 +16,7 @@ function root = newton_raphson(f, x0, options)
         options.dx = 1e-6
         options.max_iter = 100
         options.display = true
-        options.jacobian
+        options.jacobian = []
     end
 %
 %   Initial setup
@@ -37,11 +37,11 @@ function root = newton_raphson(f, x0, options)
 %
 %           Approximate the derivative using finite difference
 %
-            dfx = zeros(size(x));
+            dfx = zeros(numel(x), numel(x));
             for x_i = 1 : numel(x)
                 dx = zeros(size(x));
                 dx(x_i) = options.dx;
-                dfx(x_i) = (f(x + dx) - fx) / options.dx;
+                dfx(:, x_i) = (f(x + dx) - fx) / options.dx;
             end
         else
 %

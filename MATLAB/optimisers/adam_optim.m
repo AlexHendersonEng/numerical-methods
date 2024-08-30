@@ -19,7 +19,7 @@ function [x, f_val] = adam_optim(f, x0, options)
         options.lb = repmat(-100, size(x0))
         options.ub = repmat(100, size(x0))
         options.display = true
-        options.jacobian
+        options.jacobian = []
     end
 %
 %   Initial setup
