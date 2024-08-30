@@ -11,20 +11,23 @@ classdef Tensor < handle
         value double
         local_grad cell;
         grad double = 0
+        no_grad boolean
     end
 %
     methods
-        function obj = Tensor(value)
+        function obj = Tensor(value, options)
 %
 %           Input handling
 %
             arguments
                 value
+                options.no_grad = false
             end
 %
 %           Assign values
 %
             obj.value = value;
+            obj.no_grad = options.no_grad;
         end
 %
         c = uplus(a);
