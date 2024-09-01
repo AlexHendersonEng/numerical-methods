@@ -1,15 +1,25 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% Step method for Euler backward class
+% reset method of block class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function y = step(obj, ode_fun, y0)
+function reset(obj)
 %
-%   Step forward in time
+%   Through error if no logger
 %
-    f = @(y) y0 - y + obj.h * ode_fun(obj.t + obj.h, y);
-    y = newton_raphson(@(y) f(y), y0, 'display', false);
+    if ~obj.logging
+        error('Reset requires logging to be enabled');
+    end
+%
+%   Reset logger
+%
+    obj.logger.reset();
+%
+%   Reset block
+%
+    obj.input = obj.logger.input(1, :);
+    obj.output = obj.logger.output(1, :);
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

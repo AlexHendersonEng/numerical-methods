@@ -1,15 +1,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% Step method for Euler backward class
+% plot_digraph method of simulation class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function y = step(obj, ode_fun, y0)
+function plot_digraph(obj)
 %
-%   Step forward in time
+%   Plot adjacecny matrix in graphical form
 %
-    f = @(y) y0 - y + obj.h * ode_fun(obj.t + obj.h, y);
-    y = newton_raphson(@(y) f(y), y0, 'display', false);
+    graph = digraph(obj.connections(:, 1), obj.connections(:, 3));
+    plot(graph);
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

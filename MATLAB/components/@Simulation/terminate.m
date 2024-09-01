@@ -1,15 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% Step method for Euler backward class
+% terminate method of simulation class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function y = step(obj, ode_fun, y0)
+function terminate(obj)
 %
-%   Step forward in time
+%   Call termination method on all blocks
 %
-    f = @(y) y0 - y + obj.h * ode_fun(obj.t + obj.h, y);
-    y = newton_raphson(@(y) f(y), y0, 'display', false);
+    for block_i = 1 : obj.n_blocks
+        obj.blocks{block_i}.terminate();
+    end
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

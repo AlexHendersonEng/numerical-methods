@@ -1,15 +1,26 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% Step method for Euler backward class
+% Logger class for implementation of a logger object
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function y = step(obj, ode_fun, y0)
+classdef Logger < handle
 %
-%   Step forward in time
+    properties
+        input
+        output
+        t
+        n
+    end
 %
-    f = @(y) y0 - y + obj.h * ode_fun(obj.t + obj.h, y);
-    y = newton_raphson(@(y) f(y), y0, 'display', false);
+    methods
+        initialise(obj, block, n_steps)
+%
+        log(obj, block);
+%
+        reset(obj);
+    end
+%
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

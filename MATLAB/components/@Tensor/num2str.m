@@ -1,15 +1,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% Step method for Euler backward class
+% Tensor num2str method for converting tensor to string
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function y = step(obj, ode_fun, y0)
+function s = num2str(a)
 %
-%   Step forward in time
+%   Convert tensor to string
 %
-    f = @(y) y0 - y + obj.h * ode_fun(obj.t + obj.h, y);
-    y = newton_raphson(@(y) f(y), y0, 'display', false);
+    s = num2str(a.value);
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
