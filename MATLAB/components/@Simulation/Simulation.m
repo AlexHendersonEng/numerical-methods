@@ -15,6 +15,7 @@ classdef Simulation < handle
         solver
         order % Block index execution order
         n_steps
+        params
     end
 %
     methods

@@ -27,10 +27,14 @@ classdef TF1 < Block
 %
             obj = obj@Block(1, 1, logging);
 %
+%           Assign parameters
+%
+            obj.params = Tensor(tau);
+%
 %           Initlialise blocks and connections
 %
             obj.blocks = {Operator('+-'), ...
-                          Gain(1 / tau), ...
+                          Gain(1 ./ obj.params), ...
                           Integrator(ic), ...
                           Memory(ic)};
             obj.connections = [1, 1, 2, 1;
