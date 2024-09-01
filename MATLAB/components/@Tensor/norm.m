@@ -6,9 +6,18 @@
 %
 function c = norm(a)
 %
-%   Compute norm of tensor
+%   Compute resulting tensor
 %
-    c = norm(a.value);
+    c = Tensor(norm(a.value));
+%
+%   Return if no gradient tracking
+%
+    if a.no_grad; c.no_grad = true; return; end
+%
+%   Assign local gradients
+%
+    dcda = 2 * reshape(a.value, 1, []);
+    c.local_grad(end + 1, :) = {a, dcda};
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

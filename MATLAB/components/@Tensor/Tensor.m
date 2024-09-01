@@ -73,6 +73,16 @@ classdef Tensor < handle
         s = num2str(a);
 %
         c = norm(a);
+%
+        c = abs(a);
+%
+        c = lt(a, b);
+%
+        c = gt(a, b);
+%
+        c = le(a, b);
+%
+        c = ge(a, b);
     end
 %
 end

@@ -1,15 +1,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% Tensor power method for overloading the element-wise matrix power
-% operator
+% Tensor abs method for calculating absolute tensor value
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function c = power(a, b)
+function c = abs(a)
 %
 %   Compute resulting tensor
 %
-    c = Tensor(a.value .^ b);
+    c = Tensor(abs(a.value));
 %
 %   Return if no gradient tracking
 %
@@ -17,7 +16,7 @@ function c = power(a, b)
 %
 %   Assign local gradients
 %
-    dcda = b * diag(reshape(a.value, [], 1)) .^ (b - 1);
+    dcda = eye(numel(a.value));
     c.local_grad(end + 1, :) = {a, dcda};
 end
 %

@@ -24,7 +24,7 @@ function c = times(a, b)
 %
 %       Return if no gradient tracking
 %
-        if a.no_grad && b.no_grad; return; end
+        if a.no_grad && b.no_grad; c.no_grad = true; return; end
 %
 %       Assign local gradients
 %
