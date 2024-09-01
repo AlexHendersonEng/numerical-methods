@@ -20,22 +20,15 @@ addpath(fullfile(path, '..', '..', 'components'));
 %
 h = 0.01;
 t = (0 : h : 10)';
-solver = EulerBackward(t(1), h);
+solver = RK4(t(1), h);
 u = [0, 0, 1, 1]';
 u_t = [0, 1, 1 + 1e-3, 10]';
 %
 % Set up graph
 %
 blocks = {Input(u, u_t), ...
-          Operator('+-'), ...
-          Gain(1), ...
-          Integrator(), ...
-          Memory()};
-connections = [1, 1, 2, 1;
-               2, 1, 3, 1;
-               3, 1, 4, 1;
-               4, 1, 5, 1;
-               5, 1, 2, 2];
+          TF1()};
+connections = [1, 1, 2, 1];
 %
 % Run simulation
 %
