@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% initialise method of gain class
+% initialise method of L1 class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -16,7 +16,8 @@ function initialise(obj, solver, n_steps)
 %
 %   Calculate initial output
 %
-    obj.output = obj.params * obj.input;
+    obj.y_actual = interp1(obj.y_t, obj.y, solver.t);
+    obj.output = abs(obj.y_actual - obj.input);
 %
 %   Call superclass method
 %

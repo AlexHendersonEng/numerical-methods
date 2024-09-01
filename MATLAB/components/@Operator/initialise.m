@@ -14,10 +14,6 @@ function initialise(obj, solver, n_steps)
         n_steps
     end
 %
-%   Call superclass method
-%
-    initialise@Block(obj, solver, n_steps);
-%
 %   Initialise output
 %
     obj.output = Tensor(0);
@@ -33,6 +29,10 @@ function initialise(obj, solver, n_steps)
                 obj.output = obj.output ./ obj.input(op_i);
         end
     end
+%
+%   Call superclass method
+%
+    initialise@Block(obj, solver, n_steps);
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

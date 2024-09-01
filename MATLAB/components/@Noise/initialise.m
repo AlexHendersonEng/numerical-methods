@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% initialise method of gain class
+% initialise method of noise class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -16,7 +16,11 @@ function initialise(obj, solver, n_steps)
 %
 %   Calculate initial output
 %
-    obj.output = obj.params * obj.input;
+    if isempty(obj.sample_rate)
+        obj.sample_rate = solver.h;
+    end
+    obj.sample_n = obj.sample_rate / solver.h;
+    obj.output = obj.input + obj.mu + randn(size(obj.input)) * obj.sigma;
 %
 %   Call superclass method
 %

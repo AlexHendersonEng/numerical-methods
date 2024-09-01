@@ -1,26 +1,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% initialise method of gain class
+% reset method of noise class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function initialise(obj, solver, n_steps)
+function reset(obj)
 %
-%   Input handling
+%   Reset counter
 %
-    arguments
-        obj
-        solver
-        n_steps
-    end
-%
-%   Calculate initial output
-%
-    obj.output = obj.params * obj.input;
+    obj.n_elapsed = 0;
 %
 %   Call superclass method
 %
-    initialise@Block(obj, solver, n_steps);
+    reset@Block(obj);
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

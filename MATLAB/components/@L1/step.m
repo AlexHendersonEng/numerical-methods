@@ -1,26 +1,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% initialise method of gain class
+% step method of L1 class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function initialise(obj, solver, n_steps)
+function step(obj)
 %
-%   Input handling
+%   Step forward in time calculating new output and logging data 
+%   (runs at every simulation step)
 %
-    arguments
-        obj
-        solver
-        n_steps
-    end
-%
-%   Calculate initial output
-%
-    obj.output = obj.params * obj.input;
+    obj.y_actual = interp1(obj.y_t, obj.y, obj.solver.t);
+    obj.output = abs(obj.y_actual - obj.input);
 %
 %   Call superclass method
 %
-    initialise@Block(obj, solver, n_steps);
+    step@Block(obj);
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
