@@ -27,8 +27,10 @@ u_t = [0, 1, 1 + 1e-3, 10]';
 % Set up graph
 %
 blocks = {Input(u, u_t), ...
-          TF1()};
-connections = [1, 1, 2, 1];
+          TF1(0, 1), ...
+          Gain(2)};
+connections = [1, 1, 2, 1;
+               2, 1, 3, 1];
 %
 % Run simulation
 %
