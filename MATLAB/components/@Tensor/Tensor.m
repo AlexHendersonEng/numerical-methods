@@ -64,6 +64,8 @@ classdef Tensor < handle
 %
         zero_grad(obj);
 %
+        reset_graph(obj);
+%
         [s, t] = build_graph(obj);
 %
         c = double(a);
