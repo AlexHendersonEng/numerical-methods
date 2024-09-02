@@ -25,6 +25,8 @@ classdef ComponentsUnitTest < matlab.unittest.TestCase
         test_tensor_build_graph(test_case);
 %
         test_tensor_optimisation(test_case);
+%
+        test_basic_simulation(test_case);
     end
 %
 end
