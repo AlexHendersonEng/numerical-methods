@@ -23,6 +23,8 @@ classdef OptimisersUnitTest < matlab.unittest.TestCase
         test_particle_swarm(test_case);
 %
         test_newton_raphson(test_case);
+%
+        test_genetic_algorithm(test_case);
     end
 %
 end
