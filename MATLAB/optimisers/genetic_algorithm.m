@@ -86,15 +86,15 @@ function [x, f_val] = genetic_algorithm(f, n_vars, options)
 %           Apply position limits
 %
             new_particles(p_i).x = max(min(new_particles(p_i).x, options.ub), options.lb);
+%
+%           Get new particle loss
+%
+            new_particles(p_i).loss = f(new_particles(p_i).x);
         end
 %
 %       Update particles
 %
         particles = new_particles;
-%
-%       Get new particle loss
-%
-        particles(p_i).loss = f(particles(p_i).x);
 %
 %       Global best update
 %
