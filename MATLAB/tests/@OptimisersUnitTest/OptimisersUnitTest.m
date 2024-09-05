@@ -25,6 +25,8 @@ classdef OptimisersUnitTest < matlab.unittest.TestCase
         test_newton_raphson(test_case);
 %
         test_genetic_algorithm(test_case);
+%
+        test_simulated_annealing(test_case);
     end
 %
 end
