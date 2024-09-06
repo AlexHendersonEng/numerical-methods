@@ -27,6 +27,8 @@ classdef OptimisersUnitTest < matlab.unittest.TestCase
         test_genetic_algorithm(test_case);
 %
         test_simulated_annealing(test_case);
+%
+        test_bayes_optim(test_case);
     end
 %
 end
