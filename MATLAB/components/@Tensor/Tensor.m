@@ -83,6 +83,10 @@ classdef Tensor < handle
         c = le(a, b);
 %
         c = ge(a, b);
+%
+        c = max(a, b);
+%
+        c = min(a, b);
     end
 %
 end
