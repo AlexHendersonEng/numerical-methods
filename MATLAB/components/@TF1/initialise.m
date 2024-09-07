@@ -18,6 +18,10 @@ function initialise(obj, solver, n_steps)
 %
     obj.sim = Simulation(obj.blocks, obj.connections, solver);
 %
+%   Get parameters
+%
+    obj.params = obj.sim.parameters();
+%
 %   Assign sim initial input and output
 %
     obj.sim.blocks{1}.input(1) = obj.input;

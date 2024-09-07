@@ -27,13 +27,16 @@ function count = exec_order(obj, block_i, count)
         return
     end
 %
-%   Memory block base case: If block is a memory block add it to the
-%   execution order and increment the count
+%   Initial condition block base case: If block has an initial condition
+%   add it to the execution order and increment the count
 %
-    if strcmpi(class(obj.blocks{block_i}), 'Memory')
-        obj.order(end + 1) = block_i;
-        count = count + 1;
-        return
+    ic_blocks = {'Memory', 'Integrator'};
+    for ic_i = 1 : numel(ic_blocks)
+        if strcmpi(class(obj.blocks{block_i}), ic_blocks{ic_i})
+            obj.order(end + 1) = block_i;
+            count = count + 1;
+            return
+        end
     end
 %
 %   Loop through input blocks and add them to execution order if required
