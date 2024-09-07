@@ -40,9 +40,10 @@ function test_tensor_optimisation(test_case)
             x(x_i) = x(x_i) - h * x(x_i).grad;
         end
 %
-%       Zero gradients
+%       Zero gradients and reset computational graph
 %
         y.zero_grad();
+        y.reset_graph();
     end
 %
 %   Verify results
