@@ -7,8 +7,8 @@
 classdef Block < handle
 %
     properties
-        input Tensor
-        output Tensor
+        input
+        output
         logging logical
         solver
         logger Logger
@@ -29,8 +29,8 @@ classdef Block < handle
 %
 %           Initialise input and output
 %
-            obj.input = repmat(Tensor(0), 1, n_in);
-            obj.output = repmat(Tensor(0), 1, n_out);
+            obj.input = zeros(1, n_in);
+            obj.output = zeros(1, n_out);
 %
 %           Create logger
 %

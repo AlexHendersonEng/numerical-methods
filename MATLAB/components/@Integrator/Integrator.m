@@ -22,7 +22,7 @@ classdef Integrator < Block
 %
 %           Assign variables
 %
-            obj.output = Tensor(ic);
+            obj.output = ic;
         end
 %
         step(obj);

@@ -22,7 +22,7 @@ classdef Gain < Block
 %
 %           Assign variables
 %
-            obj.params = Tensor(gain);
+            obj.params = gain;
         end
 %
         initialise(obj, solver, n_steps)

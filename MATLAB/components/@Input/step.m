@@ -8,8 +8,8 @@ function step(obj)
 %
 %   Step forward in time calculating new output and logging data 
 %
-    obj.input = Tensor(obj.solver.t);
-    obj.output = Tensor(interp1(obj.u_t, obj.u, obj.input.value));
+    obj.input = obj.solver.t;
+    obj.output = interp1(obj.u_t, obj.u, obj.input);
 %
 %   Call superclass method
 %

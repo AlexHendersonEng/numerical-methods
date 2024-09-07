@@ -55,7 +55,7 @@ f_u = (Fs / numel(u)) * (0 : numel(U) - 1);
 %
 % Output frequency analysis  
 %
-y = [sim.blocks{2}.logger.output.value];
+y = sim.blocks{2}.logger.output;
 Y = dft(y);
 Y = Y(1 : ceil(numel(y) / 2));
 f_y = (Fs / numel(y)) * (0 : numel(U) - 1);
@@ -68,7 +68,7 @@ G = sqrt(1 ./ (1 + (1 / omega) * f_y .^ 2));
 %
 figure();
 for block_i = 1 : sim.n_blocks
-    plot(sim.blocks{block_i}.logger.t, [sim.blocks{block_i}.logger.output.value], ...
+    plot(sim.blocks{block_i}.logger.t, sim.blocks{block_i}.logger.output, ...
          'LineWidth', 1.5, ...
          'DisplayName', ['Block: ', num2str(block_i)]);
     hold('on');

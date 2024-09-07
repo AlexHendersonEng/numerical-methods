@@ -16,8 +16,8 @@ function initialise(obj, solver, n_steps)
 %
 %   Assign block initial input and output
 %
-    obj.input = Tensor(solver.t);
-    obj.output = Tensor(interp1(obj.u_t, obj.u, obj.input.value));
+    obj.input = solver.t;
+    obj.output = interp1(obj.u_t, obj.u, obj.input);
 %
 %   Call superclass method
 %
