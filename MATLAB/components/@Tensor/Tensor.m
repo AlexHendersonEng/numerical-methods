@@ -87,6 +87,8 @@ classdef Tensor < handle
         c = max(a, b);
 %
         c = min(a, b);
+%
+        c = exp(a);
     end
 %
 end
