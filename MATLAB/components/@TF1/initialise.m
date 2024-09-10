@@ -14,6 +14,11 @@ function initialise(obj, solver, n_steps)
         n_steps
     end
 %
+%   Assign sim initial input and output
+%
+    obj.blocks{1}.input(1) = obj.input;
+    obj.output = obj.blocks{3}.output;
+%
 %   Initialise sub simulation
 %
     obj.sim = Simulation(obj.blocks, obj.connections, solver);
@@ -21,11 +26,6 @@ function initialise(obj, solver, n_steps)
 %   Get parameters
 %
     obj.params = obj.sim.parameters();
-%
-%   Assign sim initial input and output
-%
-    obj.sim.blocks{1}.input(1) = obj.input;
-    obj.output = obj.sim.blocks{3}.output;
 %
 %   Call superclass method
 %

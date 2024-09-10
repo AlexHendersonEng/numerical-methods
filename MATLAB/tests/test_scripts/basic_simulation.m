@@ -40,8 +40,8 @@ connections = [1, 1, 2, 1;
 %
 sim = Simulation(blocks, connections, solver, numel(t));
 for step = 1 : numel(t) - 1
-    sim.step();
     solver.update();
+    sim.step();
 end
 sim.terminate();
 %
@@ -53,7 +53,7 @@ sim.plot_digraph();
 %
 figure();
 for block_i = 1 : sim.n_blocks
-    plot(sim.blocks{block_i}.logger.t, sim.blocks{block_i}.logger.output, ...
+    plot(sim.blocks{block_i}.logger.t, [sim.blocks{block_i}.logger.output.value], ...
          'LineWidth', 1.5, ...
          'DisplayName', ['Block: ', num2str(block_i)]);
     hold('on');

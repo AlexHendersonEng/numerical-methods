@@ -27,17 +27,28 @@ function count = exec_order(obj, block_i, count)
         return
     end
 %
-%   Initial condition block base case: If block has an initial condition
-%   add it to the execution order and increment the count
+%   Initial condition block base case: If block has dependent blocks all
+%   with an initial conditions add to execution order
 %
     ic_blocks = {'Memory', 'Integrator'};
-    for ic_i = 1 : numel(ic_blocks)
-        if strcmpi(class(obj.blocks{block_i}), ic_blocks{ic_i})
+    for dep_i = input_idx
+        if ~any(strcmpi(class(obj.blocks{dep_i}), ic_blocks))
+%
+%           If current dependent block is not a block with initial
+%           condition break loop and contiune
+%
+            break
+        elseif dep_i == input_idx(end)
+%
+%           Else if all dependent blocks have been looped through and all
+%           have initial conditions add to execution order and return
+%
             obj.order(end + 1) = block_i;
             count = count + 1;
             return
         end
     end
+
 %
 %   Loop through input blocks and add them to execution order if required
 %   and then add current block to execution order and increment count

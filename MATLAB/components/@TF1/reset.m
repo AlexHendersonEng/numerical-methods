@@ -1,26 +1,20 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% Logger class for implementation of a logger object
+% reset method of TF1 class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-classdef Logger < handle
+function reset(obj)
 %
-    properties
-        input Tensor
-        output Tensor
-        t double
-        n double
+%   Call reset method on all blocks
+%
+    for blocks_i = 1 : obj.n_blocks
+        obj.blocks{blocks_i}.reset();
     end
 %
-    methods
-        initialise(obj, block, n_steps)
+%   Call block superclass reset method
 %
-        log(obj, block);
-%
-        reset(obj);
-    end
-%
+    reset@Block(obj);
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

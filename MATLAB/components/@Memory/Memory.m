@@ -26,8 +26,8 @@ classdef Memory < Block
 %
 %           Assign variables
 %
-            obj.prev_output = ic;
-            obj.output = ic;
+            obj.prev_output = Tensor(ic);
+            obj.output = obj.prev_output;
         end
 %
         step(obj);
