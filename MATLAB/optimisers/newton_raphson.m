@@ -37,8 +37,9 @@ function root = newton_raphson(f, x0, options)
 %
 %           Approximate the derivative using finite difference
 %
-            dfx = zeros(numel(x), numel(x));
-            for x_i = 1 : numel(x)
+            n_x = numel(x);
+            dfx = zeros(n_x, n_x);
+            for x_i = 1 : n_x
                 dx = zeros(size(x));
                 dx(x_i) = options.dx;
                 dfx(:, x_i) = (f(x + dx) - fx) / options.dx;
@@ -70,7 +71,7 @@ function root = newton_raphson(f, x0, options)
 %
         if norm(x_new - x) < options.tol
             root = x_new;
-            return;
+            return
         end
 %
 %       Update the current guess and increment the iteration count

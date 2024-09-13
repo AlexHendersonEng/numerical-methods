@@ -74,9 +74,7 @@ function [x, f_val] = adam_optim(f, x0, options)
 %       Calculate the function value at the current guess
 %
         fx = f(x);
-        if fx < f_val
-            f_val = fx;
-        end
+        f_val = fx;
 %
 %       Command window output
 %
