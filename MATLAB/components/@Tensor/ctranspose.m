@@ -7,7 +7,7 @@
 %
 function c = ctranspose(a)
 %
-%   Tensors do not support complex numbers so complext conjugate transpose
+%   Tensors do not support complex numbers so complex conjugate transpose
 %   is equivalent to the standard transpose
 %
     c = transpose(a);

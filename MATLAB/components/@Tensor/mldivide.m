@@ -6,7 +6,7 @@
 %
 function c = mldivide(a, b)
 %
-%   Matrix right division is equivalent to inv(a) * b
+%   Matrix left division is equivalent to inv(a) * b
 %
     c = inv(a) * b;
 end
