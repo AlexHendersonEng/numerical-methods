@@ -5,34 +5,50 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function root = newton_raphson(f, x0, tol, max_iter, h)
+function root = newton_raphson(f, x0, options)
 %
 %   Input validation
 %
     arguments
-        f
-        x0
-        tol = 1e-6
-        max_iter = 100
-        h = 1e-6
+        f % Column vector of functions
+        x0 % Column vector of variables (size(f) == size(x0))
+        options.tol = 1e-6
+        options.dx = 1e-6
+        options.max_iter = 100
+        options.display = true
+        options.jacobian = []
     end
 %
 %   Initial setup
 %
     x = x0;
-    iter = 0;
 %
 %   Solve loop
 %
-    while iter < max_iter
+    for iter = 1 : options.max_iter
 %
 %       Calculate the function value at the current guess
 %
         fx = f(x);
 %
-%       Approximate the derivative using finite difference
+%       Get derivative
 %
-        dfx = (f(x + h) - f(x - h)) / (2 * h);
+        if isempty(options.jacobian)
+%
+%           Approximate the derivative using finite difference
+%
+            dfx = zeros(numel(x), numel(x));
+            for x_i = 1 : numel(x)
+                dx = zeros(size(x));
+                dx(x_i) = options.dx;
+                dfx(:, x_i) = (f(x + dx) - fx) / options.dx;
+            end
+        else
+%
+%           Get derivative using jacobian function
+%
+            dfx = options.jacobian(x);
+        end
 %        
 %       Check if the derivative is zero to avoid division by zero
 %
@@ -42,11 +58,17 @@ function root = newton_raphson(f, x0, tol, max_iter, h)
 %
 %       Calculate the next guess using the Newton-Raphson formula
 %
-        x_new = x - fx / dfx;
+        x_new = x - dfx \ fx;
+%
+%       Command window output
+%
+        if options.display
+            disp("Iter: " + num2str(iter) + ", x: " + num2str(x_new'));
+        end
 %
 %       Check if the change is within the tolerance
 %
-        if abs(x_new - x) < tol
+        if norm(x_new - x) < options.tol
             root = x_new;
             return;
         end
@@ -54,7 +76,6 @@ function root = newton_raphson(f, x0, tol, max_iter, h)
 %       Update the current guess and increment the iteration count
 %
         x = x_new;
-        iter = iter + 1;
     end
 %
 %   If max iterations are reached without convergence
