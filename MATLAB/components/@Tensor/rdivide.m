@@ -28,7 +28,7 @@ function c = rdivide(a, b)
 %       Assign local gradients
 %
         dcda = diag(1 ./ reshape(b.value, [], 1));
-        dcdb = -diag(reshape(a.value, [], 1) ./ (reshape(b.value, [], 1)) .^ 2);
+        dcdb = -diag(reshape(a.value, [], 1) ./ reshape(b.value, [], 1) .^ 2);
         if a.no_grad
             c.local_grad(end + 1, :) = {b, dcdb};
         elseif b.no_grad
@@ -69,7 +69,7 @@ function c = rdivide(a, b)
 %
 %       Assign local gradients
 %
-        dcdb = -diag(reshape(a, [], 1) ./ (reshape(b.value, [], 1)) .^ 2);
+        dcdb = -diag(reshape(a, [], 1) ./ reshape(b.value, [], 1) .^ 2);
         c.local_grad(end + 1, :) = {b, dcdb};
     end
 end
