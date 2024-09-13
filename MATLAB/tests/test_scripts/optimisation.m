@@ -21,9 +21,10 @@ addpath(fullfile(path, '..', '..', 'components'));
 t = (0 : 0.01 : 10)';
 y = 2 * (1 - exp(-t));
 %
-% Optimisation hyperparameters
+% Training parameters
 %
-lr = 1e-3;
+n_epochs = 500;
+lr = 1e-2;
 %
 % Set up surrogate model
 %
@@ -37,11 +38,11 @@ connections = [1, 1, 2, 1;
                2, 1, 3, 1;
                3, 1, 4, 1];
 sim = Simulation(blocks, connections, solver, numel(t));
-params = sim.parameters();
+optim = Adam(sim.parameters(), 'lr', lr);
 %
 % Train surrogate model
 %
-for epoch = 1 : 100
+for epoch = 1 : n_epochs
 %
 %   Reset epoch error
 %
@@ -79,16 +80,14 @@ for epoch = 1 : 100
 %
     sim.terminate();
 %
-%   Gradient descent
+%   Step optimiser
 %
-    for param_i = 1 : numel(params)
-        params(param_i).value = params(param_i).value - lr * params(param_i).grad;
-    end
+    optim.step();
 %
 %   Print param value
 %
         disp("Epoch: " + num2str(epoch) + ", Error: " + num2str(epoch_error) + ...
-             ", Param Value: " + num2str([params.value]));
+             ", Param Value: " + num2str([optim.params.value]));
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
