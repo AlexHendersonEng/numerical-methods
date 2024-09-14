@@ -5,6 +5,9 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 function terminate(~)
+%
+%   Runs once after simulation
+%
 
 end
 %
