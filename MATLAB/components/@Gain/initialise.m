@@ -11,12 +11,12 @@ function initialise(obj, solver, n_steps)
     arguments
         obj
         solver
-        n_steps
+        n_steps = 1
     end
 %
 %   Calculate initial output
 %
-    obj.output = obj.params * obj.input;
+    obj.output = obj.params .* obj.input;
 %
 %   Call superclass method
 %

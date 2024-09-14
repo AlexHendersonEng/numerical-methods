@@ -6,7 +6,7 @@
 %
 function reset(obj)
 %
-%   Through error if no logger
+%   Throw error if no logger
 %
     if ~obj.logging
         error('Reset requires logging to be enabled');

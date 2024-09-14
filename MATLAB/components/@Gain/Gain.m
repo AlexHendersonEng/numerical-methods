@@ -12,7 +12,7 @@ classdef Gain < Block
 %           Input handling
 %
             arguments
-                gain = 0;
+                gain = 1;
                 logging = true;
             end
 %

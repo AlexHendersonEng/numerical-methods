@@ -25,7 +25,7 @@ classdef Input < Block
 %
 %           Call super class instatiator
 %
-            obj = obj@Block(1, size(u_t, 2), logging);
+            obj = obj@Block(1, size(u, 2), logging);
 %
 %           Assign variables
 %
