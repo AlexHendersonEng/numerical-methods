@@ -21,7 +21,7 @@ function initialise(obj, solver, n_steps)
     if obj.logging
         obj.logger.initialise(obj, n_steps);
     end
-    obj.logger.log(obj);
+    obj.log();
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
