@@ -6,7 +6,7 @@
 %
 function plot_digraph(obj)
 %
-%   Plot adjacecny matrix in graphical form
+%   Plot connections in graphical form
 %
     graph = digraph(obj.connections(:, 1), obj.connections(:, 3));
     plot(graph);

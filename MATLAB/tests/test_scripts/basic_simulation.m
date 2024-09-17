@@ -45,7 +45,7 @@ for step = 1 : numel(t) - 1
 end
 sim.terminate();
 %
-% Plot outputs
+% Plot directed graph
 %
 sim.plot_digraph();
 %

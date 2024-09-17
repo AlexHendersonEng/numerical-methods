@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% Similation class for implementation of a simulation object
+% Simulation class for implementation of a simulation object
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -38,7 +38,7 @@ classdef Simulation < handle
             obj.solver = solver;
             obj.n_steps = n_steps;
 %
-%           Initialise network
+%           Initialise simulation
 %
             obj.initialise();
         end
