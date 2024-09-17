@@ -12,7 +12,7 @@ function [x, f_val] = adam_optim(f, x0, options)
         f
         x0
         options.max_iter = 100
-        options.h = 1e-3
+        options.lr = 1e-3
         options.dx = 1e-6
         options.beta1 = 0.9
         options.beta2 = 0.999
@@ -65,7 +65,7 @@ function [x, f_val] = adam_optim(f, x0, options)
 %
 %       Calculate param update
 %
-        x = x - options.h * m_hat ./ (sqrt(v_hat) + 1e-8);
+        x = x - options.lr * m_hat ./ (sqrt(v_hat) + 1e-8);
 %
 %       Apply bounds
 %

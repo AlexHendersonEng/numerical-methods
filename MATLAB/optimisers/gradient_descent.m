@@ -13,7 +13,7 @@ function [x, f_val] = gradient_descent(f, x0, options)
         f
         x0
         options.max_iter = 100
-        options.h = 1e-3
+        options.lr = 1e-3
         options.dx = 1e-6
         options.lb = repmat(-100, size(x0))
         options.ub = repmat(100, size(x0))
@@ -52,7 +52,7 @@ function [x, f_val] = gradient_descent(f, x0, options)
 %
 %       Calculate the next guess using the Newton-Raphson formula
 %
-        x = x - options.h * dfx;
+        x = x - options.lr * dfx;
 %
 %       Apply bounds
 %
