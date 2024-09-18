@@ -27,14 +27,18 @@ u_t = [0, 1, 1 + 1e-3, 10]';
 % Set up graph
 %
 blocks = {Input(u, u_t), ...
+          Split(2), ...
           TF1(0, 1), ...
           Gain(2), ...
           Noise(0, 0.01), ...
-          L2([1, 1]', [0, 10]')};
+          L2([1, 1]', [0, 10]'), ...
+          Gain(3)};
 connections = [1, 1, 2, 1;
                2, 1, 3, 1;
                3, 1, 4, 1;
-               4, 1, 5, 1];
+               4, 1, 5, 1;
+               5, 1, 6, 1;
+               2, 2, 7, 1];
 %
 % Run simulation
 %
@@ -53,10 +57,12 @@ sim.plot_digraph();
 %
 figure();
 for block_i = 1 : sim.n_blocks
-    plot(sim.blocks{block_i}.logger.t, [sim.blocks{block_i}.logger.output.value], ...
-         'LineWidth', 1.5, ...
-         'DisplayName', ['Block: ', num2str(block_i)]);
-    hold('on');
+    for out_i = 1 : numel(sim.blocks{block_i}.output)
+        plot(sim.blocks{block_i}.logger.t, [sim.blocks{block_i}.logger.output(:, out_i).value], ...
+             'LineWidth', 1.5, ...
+             'DisplayName', ['Block: ', num2str(block_i), ', Output: ', num2str(out_i)]);
+        hold('on');
+    end
 end
 hold('off');
 grid('on');
