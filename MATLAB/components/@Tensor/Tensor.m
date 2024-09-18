@@ -5,7 +5,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-classdef Tensor < handle
+classdef Tensor < handle & matlab.mixin.Copyable
 %
     properties
         value double
