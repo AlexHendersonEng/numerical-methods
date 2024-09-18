@@ -6,11 +6,15 @@
 %
 function reset(obj)
 %
-%   Call reset method on all blocks
+%   Reset blocks
 %
     for blocks_i = 1 : obj.n_blocks
         obj.blocks{blocks_i}.reset();
     end
+%
+%   Re-initialise simulation
+%
+    obj.initialise();
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

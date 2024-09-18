@@ -1,14 +1,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% reset method of block class
+% reset method of integrator class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 function reset(obj)
 %
-%   Reset logger
+%   Reset output
 %
-    obj.logger.reset();
+    obj.output(1, :) = obj.logger.output(1, :);
+%
+%   Call superclass method
+%
+    reset@Block(obj);
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

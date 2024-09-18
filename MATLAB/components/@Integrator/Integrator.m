@@ -26,6 +26,8 @@ classdef Integrator < Block
         end
 %
         step(obj);
+%
+        reset(obj);
     end
 %
 end

@@ -1,14 +1,19 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% reset method of block class
+% reset method of memory class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 function reset(obj)
 %
-%   Reset logger
+%   Reset output and previous output
 %
-    obj.logger.reset();
+    obj.prev_output(1, :) = obj.logger.output(1, :);
+    obj.output(1, :) = obj.logger.output(1, :);
+%
+%   Call superclass method
+%
+    reset@Block(obj);
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
