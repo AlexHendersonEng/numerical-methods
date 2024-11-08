@@ -22,7 +22,7 @@ function configure_logging(obj)
     keys = obj.logs_info.keys;
     obj.logs_out = containers.Map('KeyType', 'char', 'ValueType', 'any');
     for key_i = 1 : numel(keys)
-        obj.logs_out(keys{key_i}) =  LogData(t, zeros(1, n_t));
+        obj.logs_out(keys{key_i}) = LogData(t, zeros(1, n_t));
     end
 end
 %
