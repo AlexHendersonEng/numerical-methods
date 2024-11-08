@@ -22,6 +22,10 @@ classdef Input < Block
                 u double;
             end
 %
+%           Call block superclass
+%
+            obj = obj@Block();
+%
 %           Assign properties
 %
             obj.u_t = u_t;
