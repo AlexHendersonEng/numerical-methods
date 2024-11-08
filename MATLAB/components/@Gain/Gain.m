@@ -7,7 +7,7 @@
 classdef Gain < Block
 %
     properties (Access = public)
-        k double;  % Gain
+        k;  % Gain
     end
 %
     methods (Access = public)
@@ -16,7 +16,7 @@ classdef Gain < Block
 %           Input handling
 %
             arguments
-                k double = 1;
+                k = 1;
             end
 %
 %           Call block superclass
