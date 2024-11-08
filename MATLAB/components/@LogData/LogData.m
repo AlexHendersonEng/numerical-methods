@@ -8,11 +8,11 @@ classdef LogData < handle
 %
     properties (Access = public)
         time double; % Time values
-        data double; % Data values
+        data; % Data values
     end
 %
     properties (Access = private)
-        n_data; % Number of data entries
+        n_data double; % Number of data entries
     end
 %
     methods (Access = public)
@@ -22,7 +22,7 @@ classdef LogData < handle
 %
             arguments
                 time double; % Time values
-                data double; % Data values
+                data; % Data values
             end
 %
 %           Assign properties
