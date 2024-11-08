@@ -10,7 +10,7 @@ function update(obj, states, t)
 %
     arguments
         obj Simulation;
-        states double;
+        states;
         t double;
     end
 %
