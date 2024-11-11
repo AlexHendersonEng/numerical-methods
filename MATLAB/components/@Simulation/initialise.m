@@ -31,32 +31,8 @@ function initialise(obj)
 %
 %   Initialise blocks
 %
-    for exec_i = 1 : obj.n_blocks
-%
-%       Get execution block
-%
-        block_i = obj.order(exec_i);
-%
-%       Update block
-%
-        obj.blocks{block_i}.update(obj.t);
-%
-%       Update inputs of downstream blocks
-%
-        downstream_i = obj.connections((obj.connections(:, 1) == block_i), 1)';
-        for down_i = downstream_i
-%
-%           Get blocks and ports
-%
-            inblock = obj.blocks{obj.connections(down_i, 3)};
-            inport_i = obj.connections(down_i, 4);
-            outport_i = obj.connections(down_i, 2);
-%
-%           Update input
-%
-            inblock.input(inport_i) = obj.blocks{block_i}.output(outport_i);
-        end
-    end
+    states = obj.get_states();
+    obj.update(states, obj.t);
 %
 %   Initialise simulation step infomation
 %

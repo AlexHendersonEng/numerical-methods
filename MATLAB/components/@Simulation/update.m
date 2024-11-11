@@ -35,7 +35,7 @@ function update(obj, states, t)
 %
 %       Update inputs of downstream blocks
 %
-        downstream_i = obj.connections((obj.connections(:, 1) == block_i), 1)';
+        downstream_i = find(obj.connections(:, 1) == block_i, 1)';
         for down_i = downstream_i
 %
 %           Get blocks and ports
