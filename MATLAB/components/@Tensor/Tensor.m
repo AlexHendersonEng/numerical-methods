@@ -7,21 +7,24 @@
 %
 classdef Tensor < handle & matlab.mixin.Copyable
 %
-    properties
+    properties (Access = public)
         value double
-        local_grad cell;
         grad double = 0
-        no_grad
     end
 %
-    methods
+    properties (Access = private)
+        local_grad cell;
+        no_grad logical;
+    end
+%
+    methods (Access = public)
         function obj = Tensor(value, options)
 %
 %           Input handling
 %
             arguments
-                value
-                options.no_grad = false
+                value double;
+                options.no_grad logical = false;
             end
 %
 %           Assign values
