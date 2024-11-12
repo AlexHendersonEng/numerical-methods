@@ -92,6 +92,12 @@ classdef Tensor < handle & matlab.mixin.Copyable
         c = min(a, b);
 %
         c = exp(a);
+%
+        c = horzcat(a, b);
+%
+        c = vertcat(a, b);
+%
+        c = cat(dim, a, b);
     end
 %
 end
