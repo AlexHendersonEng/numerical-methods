@@ -57,6 +57,7 @@ classdef Simulation < handle
             obj.solver_select = opts.solver_select;
             obj.t = obj.t_span(1);
             obj.logs_info = opts.logs_info;
+            obj.logs_out = containers.Map('KeyType', 'char', 'ValueType', 'any');
         end
 %
         run(obj);
