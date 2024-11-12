@@ -7,16 +7,16 @@
 classdef Gain < Block
 %
     properties (Access = public)
-        k;  % Gain
+        param Tensor;  % Gain
     end
 %
     methods (Access = public)
-        function obj = Gain(k)
+        function obj = Gain(param)
 %
 %           Input handling
 %
             arguments
-                k = 1;
+                param Tensor = 1;
             end
 %
 %           Call block superclass
@@ -25,7 +25,7 @@ classdef Gain < Block
 %
 %           Assign properties
 %
-            obj.k = k;
+            obj.param = param;
         end
 %
         update(obj, ~);

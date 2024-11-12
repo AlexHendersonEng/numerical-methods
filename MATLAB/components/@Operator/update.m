@@ -15,7 +15,7 @@ function update(obj, ~)
 %
 %   Update output
 %
-    obj.output = 0;
+    obj.output = Tensor(0);
     for op_i = 1 : numel(obj.operations)
         switch obj.operations(op_i)
             case '+'

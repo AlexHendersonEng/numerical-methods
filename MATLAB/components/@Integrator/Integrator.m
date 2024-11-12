@@ -7,7 +7,7 @@
 classdef Integrator < Block
 %
     properties (Access = public)
-        state;  % Integrator state
+        state Tensor;  % Integrator state
     end
 %
     methods (Access = public)
@@ -16,7 +16,7 @@ classdef Integrator < Block
 %           Input handling
 %
             arguments
-                state = 0;
+                state Tensor = 0;
             end
 %
 %           Call block superclass

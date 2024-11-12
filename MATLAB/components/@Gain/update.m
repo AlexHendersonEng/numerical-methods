@@ -15,7 +15,7 @@ function update(obj, ~)
 %
 %   Update output
 %
-    obj.output = obj.k .* obj.input;
+    obj.output = obj.param .* obj.input;
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -15,7 +15,7 @@ function update(obj, t)
 %
 %   Update output
 %
-    obj.output = interp1(obj.u_t, obj.u, t, 'linear', 'extrap');
+    obj.output = Tensor(interp1(obj.u_t, obj.u, t, 'linear', 'extrap'));
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

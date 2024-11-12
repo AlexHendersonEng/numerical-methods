@@ -26,7 +26,7 @@ function update_logging(obj)
 %       Update log
 %
         log = obj.logs_out(keys{key_i});
-        log.data(obj.step_idx) = obj.blocks{block_i}.output(port_i);
+        log.data(obj.step_idx) = obj.blocks{block_i}.output(port_i).value;
     end
 end
 %

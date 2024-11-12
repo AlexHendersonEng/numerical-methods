@@ -7,8 +7,8 @@
 classdef Block < handle
 %
     properties (Access = public)
-        input;  % Block input
-        output; % Block output
+        input Tensor;  % Block input
+        output Tensor; % Block output
     end
 %
     methods (Access = public)

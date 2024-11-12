@@ -25,8 +25,8 @@ t = 0 : h : 10;
 %
 blocks = {Input(u_t, u);
           Operator('+-');
-          Gain(1);
-          Integrator(0)};
+          Gain(Tensor(1));
+          Integrator(Tensor(0))};
 %
 % Configure simulation
 %
