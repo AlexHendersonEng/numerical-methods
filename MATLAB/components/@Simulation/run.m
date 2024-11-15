@@ -16,6 +16,7 @@ function run(obj)
 %
     obj.initialise();
     obj.configure_logging();
+    obj.update_logging();
 %
 %   Step simulation until simulation end time (written with while loop to
 %   allow for variable step solver)
