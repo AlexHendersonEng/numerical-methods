@@ -67,7 +67,6 @@ classdef Simulation < handle
             obj.t_span = opts.t_span;
             obj.h = opts.h;
             obj.solver_select = opts.solver_select;
-            obj.t = obj.t_span(1);
             obj.logs_info = opts.logs_info;
             obj.logs_out = containers.Map('KeyType', 'char', 'ValueType', 'any');
             obj.pre_init_fcn = opts.pre_init_fcn;

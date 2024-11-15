@@ -12,6 +12,11 @@ function initialise(obj)
         obj Simulation;
     end
 %
+%   Initialise simulation time and empty state index array
+%
+    obj.t = obj.t_span(1);
+    obj.state_idx = [];
+%
 %   Determine index's to blocks containing a state within the simulation
 %
     for block_i = 1 : obj.n_blocks
