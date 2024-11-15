@@ -13,7 +13,9 @@ function c = minus(a, b)
 %       If a and b are the same tensor
 %
         if a == b
-            c = Tensor(zeros(size(a.value))) + zeros(size(a.value));
+            c = Tensor(zeros(size(a.value)));
+            dcda = zeros(numel(a.value), numel(a.value));
+            c.local_grad(end + 1, :) = {a, dcda};
             return
         end
 %
@@ -30,9 +32,9 @@ function c = minus(a, b)
         dcda = eye(numel(a.value));
         dcdb = -eye(numel(a.value));
         if a.no_grad
-            c.local_grad(end + 1, :) = {a, dcdb};
+            c.local_grad(end + 1, :) = {b, dcdb};
         elseif b.no_grad
-            c.local_grad(end + 1, :) = {b, dcda};
+            c.local_grad(end + 1, :) = {a, dcda};
         else
             c.local_grad(end + 1 : end + 2, :) = {a, dcda;
                                                   b, dcdb};
