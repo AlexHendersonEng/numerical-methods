@@ -31,6 +31,12 @@ classdef Simulation < handle
                                   % containers.Map({'signal_name1', 'signal_name2', ...}, ...
                                   %                {[block_index1, block_outport1], [block_index2, block_outport2], ...})
         step_idx double; % The current step of the simulation
+        pre_init_fcn function_handle % Pre-initialise function
+        post_init_fcn function_handle % Post-inialise function
+        pre_step_fcn function_handle % Pre-step function
+        post_step_fcn function_handle % Post-step function
+        pre_term_fcn function_handle % Pre-terminate function
+        post_term_fcn function_handle % Post-terminate functio
     end
 %
     methods (Access = public)
@@ -45,6 +51,12 @@ classdef Simulation < handle
                 opts.h double = 0.01;
                 opts.solver_select SolverSelect = SolverSelect.euler_forward;
                 opts.logs_info containers.Map = containers.Map('KeyType', 'char', 'ValueType', 'any');
+                opts.pre_init_fcn function_handle = @(sim) [];
+                opts.post_init_fcn function_handle = @(sim) [];
+                opts.pre_step_fcn function_handle = @(sim) [];
+                opts.post_step_fcn function_handle = @(sim) [];
+                opts.pre_term_fcn function_handle = @(sim) [];
+                opts.post_term_fcn function_handle = @(sim) [];
             end
 %
 %           Assign properties
@@ -58,6 +70,12 @@ classdef Simulation < handle
             obj.t = obj.t_span(1);
             obj.logs_info = opts.logs_info;
             obj.logs_out = containers.Map('KeyType', 'char', 'ValueType', 'any');
+            obj.pre_init_fcn = opts.pre_init_fcn;
+            obj.post_init_fcn = opts.post_init_fcn;
+            obj.pre_step_fcn = opts.pre_step_fcn;
+            obj.post_step_fcn = opts.post_step_fcn;
+            obj.pre_term_fcn = opts.pre_term_fcn;
+            obj.post_term_fcn = opts.post_term_fcn;
         end
 %
         run(obj);
