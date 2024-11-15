@@ -79,6 +79,8 @@ classdef Simulation < handle
         end
 %
         run(obj);
+%
+        params = get_parameters(obj);
     end
 %
     methods (Access = private)
