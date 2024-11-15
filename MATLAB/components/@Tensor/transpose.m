@@ -12,7 +12,7 @@ function c = transpose(a)
 %
 %   Return if no gradient tracking
 %
-    if a.no_grad; c.np_grad = true; return; end
+    if a.no_grad; c.no_grad = true; return; end
 %
 %   Assign local gradients
 %
