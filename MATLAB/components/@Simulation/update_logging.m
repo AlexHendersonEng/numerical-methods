@@ -20,8 +20,8 @@ function update_logging(obj)
 %       Get block and port location for logged signal
 %
         loc = obj.logs_info(keys{key_i});
-        block_i = loc{1}(1);
-        port_i = loc{1}(2);
+        block_i = loc(1);
+        port_i = loc(2);
 %
 %       Update log
 %
