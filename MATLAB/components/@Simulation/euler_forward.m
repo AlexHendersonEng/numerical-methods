@@ -19,7 +19,9 @@ function states = euler_forward(obj)
 %
 %   Update states
 %
-    states = states + obj.h .* derivatives;
+    states = arrayfun(@(state, derivative) state + obj.h .* derivative, ...
+                      states, ...
+                      derivatives);
 %
 %   Update simulation time
 %

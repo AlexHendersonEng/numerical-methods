@@ -18,7 +18,7 @@ function states = euler_backward(obj)
 %
 %   Solve for new states
 %
-    states = newton_raphson(@(x) loss_fun(obj, x, x0), x0, ...
+    states = newton_raphson(@(x) loss_fcn(obj, x, x0), x0, ...
                             'display', false)';
 %
 %   Update simulation time
@@ -26,7 +26,7 @@ function states = euler_backward(obj)
     obj.t = obj.t + obj.h;
 end
 %
-function error = loss_fun(obj, x, x0)
+function error = loss_fcn(obj, x, x0)
 %
 %   Update simulation
 %
@@ -38,7 +38,10 @@ function error = loss_fun(obj, x, x0)
 %
 %   Compute error
 %
-    error = x0 - x + obj.h * dxdt;
+    error = arrayfun(@(x0, x, dxdt) x0 - x + obj.h .* dxdt, ...
+                     x0, ...
+                     x, ...
+                     dxdt);
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

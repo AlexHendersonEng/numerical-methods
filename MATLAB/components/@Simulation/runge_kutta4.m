@@ -22,25 +22,36 @@ function states = runge_kutta4(obj)
 %
 %   k2 step
 %
-    adj_states = states + 0.5 * obj.h .* k1;
+    adj_states = arrayfun(@(state, derivative) state + 0.5 * obj.h .* derivative, ...
+                          states, ...
+                          k1);
     obj.update(adj_states, obj.t + 0.5 * obj.h);
     k2 = obj.get_derivatives();
 %
 %   k3 step
 %
-    adj_states = states + 0.5 * obj.h .* k2;
+    adj_states = arrayfun(@(state, derivative) state + 0.5 * obj.h .* derivative, ...
+                          states, ...
+                          k2);
     obj.update(adj_states, obj.t + 0.5 * obj.h);
     k3 = obj.get_derivatives();
 %
 %   k4 step
 %
-    adj_states = states + obj.h * k3;
+    adj_states = arrayfun(@(state, derivative) state + obj.h .* derivative, ...
+                          states, ...
+                          k3);
     obj.update(adj_states, obj.t + obj.h);
     k4 = obj.get_derivatives();
 %
 %   Update states
 %
-    states = states + (obj.h / 6) * (k1 + 2 * k2 + 2 * k3 + k4);
+    states = arrayfun(@(state, d1, d2, d3, d4) state + (obj.h / 6) * (d1 + 2 * d2 + 2 * d3 + d4), ...
+                      states, ...
+                      k1, ...
+                      k2, ...
+                      k3, ...
+                      k4);
 %
 %   Update simulation time
 %
