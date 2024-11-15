@@ -14,7 +14,7 @@ function derivatives = get_derivatives(obj)
 %
 %   Loop over state blocks and get derivatives
 %
-    derivatives = zeros(1, obj.n_states);
+    derivatives = repmat(Tensor(0), 1, obj.n_states);
     for state_n = 1 : obj.n_states
         state_i = obj.state_idx(state_n);
         derivatives(state_n) = obj.blocks{state_i}.input;

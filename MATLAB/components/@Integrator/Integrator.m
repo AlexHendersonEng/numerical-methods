@@ -16,7 +16,7 @@ classdef Integrator < Block
 %           Input handling
 %
             arguments
-                state Tensor = 0;
+                state Tensor = Tensor(0);
             end
 %
 %           Call block superclass

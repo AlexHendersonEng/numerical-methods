@@ -14,7 +14,7 @@ function states = get_states(obj)
 %
 %   Loop over state blocks and get states
 %
-    states = zeros(1, obj.n_states);
+    states = repmat(Tensor(0), 1, obj.n_states);
     for state_n = 1 : obj.n_states
         state_i = obj.state_idx(state_n);
         states(state_n) = obj.blocks{state_i}.state;
