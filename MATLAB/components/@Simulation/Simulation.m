@@ -79,6 +79,8 @@ classdef Simulation < handle
 %
         run(obj);
 %
+        plot_digraph(obj);
+%
         params = get_parameters(obj);
     end
 %
