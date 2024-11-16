@@ -21,7 +21,7 @@ classdef Integrator < Block
 %
 %           Call block superclass
 %
-            obj = obj@Block();
+            obj = obj@Block(1, 1);
 %
 %           Assign properties
 %

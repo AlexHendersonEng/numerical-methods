@@ -24,7 +24,7 @@ classdef Input < Block
 %
 %           Call block superclass
 %
-            obj = obj@Block();
+            obj = obj@Block(0, 1);
 %
 %           Assign properties
 %

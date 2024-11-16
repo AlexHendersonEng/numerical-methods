@@ -21,6 +21,10 @@ classdef L2 < Block
                 y double;
             end
 %
+%           Call block superclass
+%
+            obj = obj@Block(1, 1);
+%
 %           Assign properties
 %
             obj.y_t = y_t;

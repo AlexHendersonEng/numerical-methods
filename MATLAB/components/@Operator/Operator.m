@@ -21,7 +21,7 @@ classdef Operator < Block
 %
 %           Call block superclass
 %
-            obj = obj@Block();
+            obj = obj@Block(numel(operations), 1);
 %
 %           Assign properties
 %
