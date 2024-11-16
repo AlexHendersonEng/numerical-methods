@@ -24,25 +24,43 @@ t = 0 : h : 10;
 % Configure blocks
 %
 blocks = {Input(u_t, u);
-          Operator('+-');
-          Gain(Tensor(1));
+          Gain(Tensor(5));
+          Gain(Tensor(5));
+          Operator('+--');
+          Integrator(Tensor(0));
           Integrator(Tensor(0))};
 %
 % Configure simulation
 %
 connections = [1, 1, 2, 1;
-               2, 1, 3, 1;
-               3, 1, 4, 1;
-               4, 1, 2, 2];
+               2, 1, 4, 1;
+               5, 1, 4, 2;
+               6, 1, 3, 1;
+               3, 1, 4, 3;
+               4, 1, 5, 1;
+               5, 1, 6, 1];
 sim = Simulation(blocks, connections, ...
                  't_span', [0, 10], ...
                  'h', h, ...
                  'solver', 'runge_kutta4', ...
-                 'logs_info', containers.Map({'output'}, {[4, 1]}));
+                 'logs_info', containers.Map({'input', 'output'}, ...
+                                             {[1, 1], [6, 1]}));
 %
 % Run simulation
 %
+sim.plot_digraph();
 sim.run();
+plot(sim.logs_out('input').time, sim.logs_out('input').data, ...
+     'LineWidth', 1.5, ...
+     'DisplayName', 'Input');
+hold on;
+plot(sim.logs_out('output').time, sim.logs_out('output').data, ...
+     'LineWidth', 1.5, ...
+     'DisplayName', 'Output');
+grid on;
+xlabel('Time (s)');
+ylabel('Magnitude');
+legend('Location', 'northeast');
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % End
