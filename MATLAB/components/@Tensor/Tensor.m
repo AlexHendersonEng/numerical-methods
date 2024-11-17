@@ -11,9 +11,6 @@ classdef Tensor < handle & matlab.mixin.Copyable
         value double;
         grad double = 0;
         no_grad logical;
-    end
-%
-    properties (Access = private)
         local_grad cell;
     end
 %
