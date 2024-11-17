@@ -42,22 +42,30 @@ connections = [1, 1, 2, 1;
 sim = Simulation(blocks, connections, ...
                  't_span', [0, 10], ...
                  'h', h, ...
-                 'solver', 'runge_kutta4', ...
+                 'solver', 'euler_backward', ...
                  'logs_info', containers.Map({'input', 'output'}, ...
                                              {[1, 1], [6, 1]}));
 %
 % Run simulation
 %
-sim.plot_digraph();
 sim.run();
+%
+% Plot simulation block graph
+%
+figure();
+sim.plot_digraph();
+%
+% Plot simulation logs
+%
+figure();
 plot(sim.logs_out('input').time, sim.logs_out('input').data, ...
      'LineWidth', 1.5, ...
      'DisplayName', 'Input');
-hold on;
+hold('on');
 plot(sim.logs_out('output').time, sim.logs_out('output').data, ...
      'LineWidth', 1.5, ...
      'DisplayName', 'Output');
-grid on;
+grid('on');
 xlabel('Time (s)');
 ylabel('Magnitude');
 legend('Location', 'northeast');
