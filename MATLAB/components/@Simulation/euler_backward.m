@@ -12,14 +12,17 @@ function states = euler_backward(obj)
         obj Simulation;
     end
 %
-%   Get current simulation states
+%   Get current simulation states and derivatives
 %
-    x0 = obj.get_states()';
+    x0 = arrayfun(@(tensor) tensor.value, obj.get_states())';
+    derivatives = reshape(obj.get_derivatives(), [], 1);
 %
 %   Solve for new states
 %
-    states = newton_raphson(@(x) loss_fcn(obj, x, x0), x0, ...
-                            'display', false)';
+    x = newton_raphson(@(x) loss_fcn(obj, x, x0), x0, ...
+                       'display', false);
+    states = arrayfun(@(x, derivative) generate_states(obj, x, derivative), ...
+                      x, derivatives);
 %
 %   Update simulation time
 %
@@ -30,18 +33,24 @@ function error = loss_fcn(obj, x, x0)
 %
 %   Update simulation
 %
-    obj.update(x, obj.t + obj.h);
+    states = arrayfun(@(val) Tensor(val), x);
+    obj.update(states, obj.t + obj.h);
 %
 %   Extract derivatives
 %
-    dxdt = obj.get_derivatives()';
+    dxdt = arrayfun(@(tensor) tensor.value, obj.get_derivatives())';
 %
 %   Compute error
 %
-    error = arrayfun(@(x0, x, dxdt) x0 - x + obj.h .* dxdt, ...
-                     x0, ...
-                     x, ...
-                     dxdt);
+    error = x0 - x + obj.h .* dxdt;
+end
+%
+function state = generate_states(obj, x, derivative)
+%
+%   Generate state
+%
+    state = Tensor(x);
+    state.local_grad(end + 1, :) = {derivative, obj.h};
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
