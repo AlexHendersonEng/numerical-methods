@@ -21,7 +21,7 @@ function states = euler_backward(obj)
 %
     x = newton_raphson(@(x) loss_fcn(obj, x, x0), x0, ...
                        'display', false);
-    states = arrayfun(@(x, derivative) generate_states(obj, x, derivative), ...
+    states = arrayfun(@(x, derivative) generate_state(obj, x, derivative), ...
                       x, derivatives);
 %
 %   Update simulation time
@@ -45,9 +45,9 @@ function error = loss_fcn(obj, x, x0)
     error = x0 - x + obj.h .* dxdt;
 end
 %
-function state = generate_states(obj, x, derivative)
+function state = generate_state(obj, x, derivative)
 %
-%   Generate state
+%   Generate state and override gradient tracking
 %
     state = Tensor(x);
     state.local_grad(end + 1, :) = {derivative, obj.h};
