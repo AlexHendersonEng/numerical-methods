@@ -30,7 +30,7 @@ function initialise(obj)
 %
     count = 1;
     for block_i = 1 : obj.n_blocks
-        count = obj.exec_order(block_i, count);
+        count = Simulation.exec_order(obj, block_i, count);
         if count > obj.n_blocks; break; end
     end
 %

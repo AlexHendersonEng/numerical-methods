@@ -96,8 +96,6 @@ classdef Simulation < handle
 %
         update_logging(obj);
 %
-        count = exec_order(obj, block_i, count);
-%
         states = get_states(obj);
 %
         derivatives  = get_derivatives(obj);
@@ -109,6 +107,12 @@ classdef Simulation < handle
         states = runge_kutta4(obj);
 %
         states = euler_backward(obj);
+    end
+%
+    methods (Static)
+        update_blocks(obj, t);
+%
+        count = exec_order(obj, block_i, count);
     end
 %
 end
