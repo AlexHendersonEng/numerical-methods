@@ -16,8 +16,24 @@ function params = get_parameters(obj)
 %
     params = [];
     for block_i = 1 : obj.n_blocks
-        if any(strcmpi(fieldnames(obj.blocks{block_i}), 'param'))
-            params = [params, obj.blocks{block_i}.param];
+        param = get_paramter(obj.blocks{block_i}, []);
+        params = [params, param];
+    end
+end
+%
+function param = get_paramter(parent, param)
+%
+%   If block has param property add parameter to parameter array
+%
+    if any(strcmpi(fieldnames(parent), 'param'))
+        param = [param, parent.param];
+    end
+%
+%   If block has sub-blocks recursively get parameters of sub-blocks
+%
+    if any(strcmpi(fieldnames(parent), 'blocks'))
+        for block_i = 1 : numel(parent.blocks)
+            param = get_paramter(parent.blocks{block_i}, param);
         end
     end
 end
