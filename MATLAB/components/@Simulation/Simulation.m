@@ -22,8 +22,9 @@ classdef Simulation < handle
     end
 %
     properties (Access = private)
-        state_idx double; % Index's of blocks in the simulation which have a
-                          % state
+        state_idx cell; % Index's of blocks in the simulation which have a
+                        % state in form {[block_idx, sub-block_idx, ...];
+                        %                block_idx; ...}
         n_states double; % Number of states in the simulation
         n_blocks double; % Number of blocks in the simulation
         order double; % Block execution order

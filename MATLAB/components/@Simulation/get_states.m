@@ -12,13 +12,23 @@ function states = get_states(obj)
         obj Simulation;
     end
 %
-%   Loop over state blocks and get states
+%   Get states from state blocks
 %
-    states = repmat(Tensor(0), 1, obj.n_states);
-    for state_n = 1 : obj.n_states
-        state_i = obj.state_idx(state_n);
-        states(state_n) = obj.blocks{state_i}.state;
+    states = arrayfun(@(block_tree) get_state(obj, block_tree), obj.state_idx);
+end
+%
+function state = get_state(parent, block_tree)
+%
+%   Loop through block tree
+%
+    for block_i = block_tree{1}
+        blocks = parent.blocks;
+        parent = blocks{block_i};
     end
+%
+%   Get state
+%
+    state = parent.state;
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

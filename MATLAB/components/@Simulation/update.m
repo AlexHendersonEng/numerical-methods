@@ -14,11 +14,10 @@ function update(obj, states, t)
         t double;
     end
 %
-%   Set integrator states
+%   Set states
 %
     for state_n = 1 : obj.n_states
-        state_i = obj.state_idx(state_n);
-        obj.blocks{state_i}.state = states(state_n);
+        set_state(states(state_n), obj, obj.state_idx{state_n});
     end
 %
 %   Update blocks
@@ -49,6 +48,20 @@ function update(obj, states, t)
             inblock.input(inport_i) = obj.blocks{block_i}.output(outport_i);
         end
     end
+end
+%
+function set_state(state, parent, block_tree)
+%
+%   Loop through block tree
+%
+    for block_i = block_tree
+        blocks = parent.blocks;
+        parent = blocks{block_i};
+    end
+%
+%   Get state
+%
+    parent.state = state;
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
