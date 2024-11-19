@@ -22,11 +22,7 @@ function update(obj, states, t)
 %
 %   Update blocks
 %
-    for exec_i = 1 : obj.n_blocks
-%
-%       Get execution block
-%
-        block_i = obj.order(exec_i);
+    for block_i = obj.order
 %
 %       Update block
 %
