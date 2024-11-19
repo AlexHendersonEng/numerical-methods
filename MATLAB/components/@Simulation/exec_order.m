@@ -54,7 +54,7 @@ function count = exec_order(obj, block_i, count)
 %   and then add current block to execution order and increment count
 %
     for dep_i = input_idx
-        count = obj.exec_order(dep_i, count);
+        count = Simulation.exec_order(obj, dep_i, count);
     end
     obj.order(end + 1) = block_i;
     count = count + 1;
