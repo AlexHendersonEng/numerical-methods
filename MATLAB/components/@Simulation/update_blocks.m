@@ -27,7 +27,7 @@ function update_blocks(obj, t)
 %
 %           Update inputs
 %
-            inblock.input(inport_i) = obj.blocks{block_i}.output(outport_i);
+            inblock.input(inport_i) = copy(obj.blocks{block_i}.output(outport_i));
         end
     end
 end
