@@ -14,21 +14,21 @@ function derivatives = get_derivatives(obj)
 %
 %   Get derivatives from state blocks
 %
-    derivatives = arrayfun(@(block_tree) get_derivative(obj, block_tree), obj.state_idx);
+    derivatives = cellfun(@(block_tree) get_derivative(obj, block_tree), obj.state_idx);
 end
 %
-function state = get_derivative(parent, block_tree)
+function derivative = get_derivative(parent, block_tree)
 %
 %   Loop through block tree
-%W
-    for block_i = block_tree{1}
+%
+    for block_i = block_tree
         blocks = parent.blocks;
         parent = blocks{block_i};
     end
 %
 %   Get derivative
 %
-    state = parent.input;
+    derivative = parent.input;
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -34,7 +34,7 @@ function set_state(state, parent, block_tree)
         parent = blocks{block_i};
     end
 %
-%   Get state
+%   Set state
 %
     parent.state = state;
 end
