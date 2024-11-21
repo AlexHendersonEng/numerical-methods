@@ -19,8 +19,8 @@ classdef TF1 < Block
 %           Input handling
 %
             arguments
-                state Tensor = 0;
-                param Tensor = 1;
+                state Tensor = Tensor(0);
+                param Tensor = Tensor(1);
             end
 %
 %           Call block superclass

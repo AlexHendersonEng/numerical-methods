@@ -16,7 +16,7 @@ classdef Gain < Block
 %           Input handling
 %
             arguments
-                param Tensor = 1;
+                param Tensor = Tensor(1);
             end
 %
 %           Call block superclass
