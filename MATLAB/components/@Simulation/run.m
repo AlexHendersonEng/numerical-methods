@@ -35,6 +35,10 @@ function run(obj)
     obj.pre_term_fcn(obj);
     obj.terminate();
     obj.post_term_fcn(obj);
+%
+%   Increment run count
+%
+    obj.run_count = obj.run_count + 1;
 end
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

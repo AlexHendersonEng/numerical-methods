@@ -18,7 +18,8 @@ classdef Simulation < handle
         t double; % Simulation current time (s)
         logs_out containers.Map; % Logged data in the form:
                                  % containers.Map({'signal_name1', 'signal_name2', ...}, ...
-                                 %                {LogData1, LogData2, ...})     
+                                 %                {LogData1, LogData2, ...})
+        restart logical; % Simulation restart flag
     end
 %
     properties (Access = private)
@@ -37,7 +38,9 @@ classdef Simulation < handle
         pre_step_fcn function_handle % Pre-step function
         post_step_fcn function_handle % Post-step function
         pre_term_fcn function_handle % Pre-terminate function
-        post_term_fcn function_handle % Post-terminate functio
+        post_term_fcn function_handle % Post-terminate function
+        restart_states Tensor % Restart states
+        run_count double = 0; % Run count (for restarting)
     end
 %
     methods (Access = public)
@@ -58,6 +61,7 @@ classdef Simulation < handle
                 opts.post_step_fcn function_handle = @(sim) [];
                 opts.pre_term_fcn function_handle = @(sim) [];
                 opts.post_term_fcn function_handle = @(sim) [];
+                opts.restart = false;
             end
 %
 %           Assign properties
@@ -76,6 +80,7 @@ classdef Simulation < handle
             obj.post_step_fcn = opts.post_step_fcn;
             obj.pre_term_fcn = opts.pre_term_fcn;
             obj.post_term_fcn = opts.post_term_fcn;
+            obj.restart = opts.restart;
         end
 %
         run(obj);

@@ -12,34 +12,57 @@ function initialise(obj)
         obj Simulation;
     end
 %
-%   Initialise simulation time and empty state index array
+%   Initialise simulation time and restart flag
 %
     obj.t = obj.t_span(1);
-    obj.state_idx = {};
+    restart_flag = obj.restart && obj.run_count > 0;
 %
-%   Determine index's to blocks containing a state within the simulation
+%   Determine index's to blocks containing a state within the simulation if
+%   required
 %
-    for block_i = 1 : obj.n_blocks
-        get_state_idx(obj, ...
-                      obj.blocks{block_i}, ...
-                      block_i);
+    if ~restart_flag
+        obj.state_idx = {};
+        for block_i = 1 : obj.n_blocks
+            get_state_idx(obj, ...
+                          obj.blocks{block_i}, ...
+                          block_i);
+        end
+        obj.n_states = numel(obj.state_idx);
     end
-    obj.n_states = numel(obj.state_idx);
 %
-%   Get block execution order
+%   Get block execution order if required
 %
-    count = 1;
-    for block_i = 1 : obj.n_blocks
-        count = Simulation.exec_order(obj, block_i, count);
-        if count > obj.n_blocks; break; end
+    if ~restart_flag
+        count = 1;
+        for block_i = 1 : obj.n_blocks
+            count = Simulation.exec_order(obj, block_i, count);
+            if count > obj.n_blocks; break; end
+        end
     end
 %
 %   Initialise blocks
 %
-    states = obj.get_states();
+    if ~restart_flag
+%
+%       Simulation is not being restarted either because restart is not
+%       enabled or it is the first run
+%
+        states = obj.get_states();
+        if obj.restart
+            obj.restart_states = states;
+        end
+    else
+%
+%       Simulation is being restarted, so use restart states
+%
+        states = obj.restart_states;
+    end
+%
+%   Update simulation
+%
     obj.update(states, obj.t);
 %
-%   Initialise simulation step infomation
+%   Initialise simulation step index
 %
     obj.step_idx = 1;
 end
