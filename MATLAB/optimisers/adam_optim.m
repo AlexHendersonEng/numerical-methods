@@ -4,22 +4,23 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function [x, f_val] = adam_optim(f, x0, options)
+function [x, f_val] = adam_optim(f, x0, opts)
 %
 %   Input validation
 %
     arguments
-        f
-        x0
-        options.max_iter = 100
-        options.lr = 1e-3
-        options.dx = 1e-6
-        options.beta1 = 0.9
-        options.beta2 = 0.999
-        options.lb = repmat(-100, size(x0))
-        options.ub = repmat(100, size(x0))
-        options.display = true
-        options.jacobian = []
+        f function_handle;
+        x0;
+        opts.max_iter double = 100;
+        opts.lr double = 1e-3;
+        opts.dx double = 1e-6;
+        opts.beta1 double = 0.9;
+        opts.beta2 double = 0.999;
+        opts.lb double = repmat(-100, size(x0));
+        opts.ub double = repmat(100, size(x0));
+        opts.display logical = true;
+        opts.jacobian function_handle = @(x) [];
+        opts.lr_scheduler function_handle = @(lr, iter, f_val) lr;
     end
 %
 %   Initial setup
@@ -32,44 +33,48 @@ function [x, f_val] = adam_optim(f, x0, options)
 %
 %   Solve loop
 %
-    for iter = 1 : options.max_iter
+    for iter = 1 : opts.max_iter
+%
+%       Call learning rate scheduler
+%
+        opts.lr = opts.lr_scheduler(opts.lr, iter, f_val);
 %
 %       Get derivative
 %
-        if isempty(options.jacobian)
+        if isempty(opts.jacobian(x))
 %
 %           Approximate the derivative using finite difference
 %
             dfx = zeros(size(x));
             for x_i = 1 : numel(x)
                 dx = zeros(size(x));
-                dx(x_i) = options.dx;
-                dfx(x_i) = (f(x + dx) - fx) / options.dx;
+                dx(x_i) = opts.dx;
+                dfx(x_i) = (f(x + dx) - fx) / opts.dx;
             end
         else
 %
 %           Get derivative using jacobian function
 %
-            dfx = options.jacobian(x);
+            dfx = opts.jacobian(x);
         end
 %
 %       Update biased first and second moment estimate
 %
-        m = options.beta1 * m + (1 - options.beta1) * dfx;
-        v = options.beta2 * v + (1 - options.beta2) * dfx .^ 2;
+        m = opts.beta1 * m + (1 - opts.beta1) * dfx;
+        v = opts.beta2 * v + (1 - opts.beta2) * dfx .^ 2;
 %
 %       Compute bias corrected first and second moment estimate 
 %
-        m_hat = m ./ (1 - options.beta1 ^ iter);
-        v_hat = v ./ (1 - options.beta2 ^ iter);
+        m_hat = m ./ (1 - opts.beta1 ^ iter);
+        v_hat = v ./ (1 - opts.beta2 ^ iter);
 %
 %       Calculate param update
 %
-        x = x - options.lr * m_hat ./ (sqrt(v_hat) + 1e-8);
+        x = x - opts.lr * m_hat ./ (sqrt(v_hat) + 1e-8);
 %
 %       Apply bounds
 %
-        x = min(max(x, options.lb), options.ub);
+        x = min(max(x, opts.lb), opts.ub);
 %
 %       Calculate the function value at the current guess
 %
@@ -78,7 +83,7 @@ function [x, f_val] = adam_optim(f, x0, options)
 %
 %       Command window output
 %
-        if options.display
+        if opts.display
             disp("Iter: " + num2str(iter) + ", f_val: " + num2str(f_val));
         end
     end

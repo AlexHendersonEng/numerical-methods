@@ -5,20 +5,21 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function [x, f_val] = gradient_descent(f, x0, options)
+function [x, f_val] = gradient_descent(f, x0, opts)
 %
 %   Input validation
 %
     arguments
-        f
-        x0
-        options.max_iter = 100
-        options.lr = 1e-3
-        options.dx = 1e-6
-        options.lb = repmat(-100, size(x0))
-        options.ub = repmat(100, size(x0))
-        options.display = true
-        options.jacobian = []
+        f function_handle;
+        x0;
+        opts.max_iter double = 100;
+        opts.lr double = 1e-3;
+        opts.dx double = 1e-6;
+        opts.lb double = repmat(-100, size(x0));
+        opts.ub double = repmat(100, size(x0));
+        opts.display logical = true;
+        opts.jacobian = @(x) [];
+        opts.lr_scheduler = @(lr, iter, f_val) lr;
     end
 %
 %   Initial setup
@@ -29,34 +30,38 @@ function [x, f_val] = gradient_descent(f, x0, options)
 %
 %   Solve loop
 %
-    for iter = 1 : options.max_iter
+    for iter = 1 : opts.max_iter
+%
+%       Call learning rate scheduler
+%
+        opts.lr = opts.lr_scheduler(opts.lr, iter, f_val);
 %
 %       Get derivative
 %
-        if isempty(options.jacobian)
+        if isempty(opts.jacobian(x))
 %
 %           Approximate the derivative using finite difference
 %
             dfx = zeros(size(x));
             for x_i = 1 : numel(x)
                 dx = zeros(size(x));
-                dx(x_i) = options.dx;
-                dfx(x_i) = (f(x + dx) - fx) / options.dx;
+                dx(x_i) = opts.dx;
+                dfx(x_i) = (f(x + dx) - fx) / opts.dx;
             end
         else
 %
 %           Get derivative using jacobian function
 %
-            dfx = options.jacobian(x);
+            dfx = opts.jacobian(x);
         end
 %
 %       Calculate the next guess using the Newton-Raphson formula
 %
-        x = x - options.lr * dfx;
+        x = x - opts.lr * dfx;
 %
 %       Apply bounds
 %
-        x = min(max(x, options.lb), options.ub);
+        x = min(max(x, opts.lb), opts.ub);
 %
 %       Calculate the function value at the current guess
 %
@@ -65,7 +70,7 @@ function [x, f_val] = gradient_descent(f, x0, options)
 %
 %       Command window output
 %
-        if options.display
+        if opts.display
             disp("Iter: " + num2str(iter) + ", f_val: " + num2str(f_val));
         end
     end
