@@ -55,9 +55,29 @@ n_params = numel(params);
 x0 = arrayfun(@(tensor) tensor.value, params);
 adam_optim(@(x) loss_fcn(x, sim, params, n_params), ...
            x0, ...
-           'lr', 1e-1, ...
-           'max_iter', 500, ...
-           'jacobian', @(x) jacobian_fcn(params, n_params));
+           'lr', 1e-2, ...
+           'max_iter', 200, ...
+           'jacobian', @(x) jacobian_fcn(params, n_params), ...
+           'lr_scheduler', @(lr, iter, f_val) lr_scheduler(lr, iter));
+%
+% Plot result comparison
+%
+figure();
+plot(u_t, u, ...
+     'LineWidth', 1.5, ...
+     'DisplayName', 'Input');
+hold('on');
+plot(train_data.time, train_data.data, ...
+     'LineWidth', 1.5, ...
+     'DisplayName', 'Actual Output');
+plot(sim.logs_out('output').time, sim.logs_out('output').data, ...
+     'LineWidth', 1.5, ...
+     'DisplayName', 'Surrogate Output');
+hold('off');
+grid('on');
+xlabel('Time (s)');
+ylabel('Magnitude');
+legend('Location', 'northeast');
 %
 % Post-init function
 %
@@ -114,6 +134,18 @@ function jacobian = jacobian_fcn(params, n_params)
     jacobian = zeros(1, n_params);
     for n = 1 : n_params
         jacobian(n) = params(n).grad;
+    end
+end
+%
+% Learning rate scheduler function
+%
+function lr = lr_scheduler(lr, iter)
+%
+%   Adjust learnig rate
+%
+    if mod(iter, 100) == 0
+        lr = lr * 0.5;
+        disp("Learning rate: " + num2str(lr));
     end
 end
 %
