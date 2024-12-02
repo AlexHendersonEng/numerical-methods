@@ -118,11 +118,11 @@ function loss = loss_fcn(x, sim, params, n_params)
 %
 %   Run simulation
 %
-    sim.run();
+    logs_out = sim.run();
 %
 %   Calculate loss
 %
-    loss = mean(sim.logs_out('loss').data) .^ 2;
+    loss = mean(logs_out('loss').data) .^ 2;
 end
 %
 % Jacobian function

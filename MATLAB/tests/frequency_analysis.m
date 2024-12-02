@@ -47,7 +47,7 @@ sim = Simulation(blocks, connections, ...
 %
 % Run simulation
 %
-sim.run();
+logs_out = sim.run();
 %
 % Input frequency analysis
 %
@@ -58,7 +58,7 @@ u_amplitude = abs(U / numel(u));
 %
 % Output frequency analysis
 %
-y = sim.logs_out('output').data;
+y = logs_out('output').data;
 Y = dft(y);
 Y = Y(1 : ceil(numel(y) / 2));
 f_y = (Fs / numel(y)) * (0 : numel(Y) - 1);
@@ -71,9 +71,9 @@ G = sqrt(1 ./ (1 + (1 / omega) * f_y .^ 2));
 % Plot simulation logs
 %
 figure();
-keys = sim.logs_out.keys;
+keys = logs_out.keys;
 for key_i = 1 : numel(keys)
-    plot(sim.logs_out(keys{key_i}).time, sim.logs_out(keys{key_i}).data, ...
+    plot(logs_out(keys{key_i}).time, logs_out(keys{key_i}).data, ...
          'LineWidth', 1.5, ...
          'DisplayName', keys{key_i});
     hold('on');
