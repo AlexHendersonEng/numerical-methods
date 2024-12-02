@@ -83,7 +83,7 @@ classdef Simulation < handle
             obj.restart = opts.restart;
         end
 %
-        run(obj);
+        logs_out = run(obj);
 %
         plot_digraph(obj);
 %

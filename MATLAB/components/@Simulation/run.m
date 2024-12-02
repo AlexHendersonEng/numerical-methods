@@ -4,7 +4,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-function run(obj)
+function logs_out = run(obj)
 %
 %   Input handling
 %
@@ -35,6 +35,12 @@ function run(obj)
     obj.pre_term_fcn(obj);
     obj.terminate();
     obj.post_term_fcn(obj);
+%
+%   Output log data
+%
+    if nargout > 0
+        logs_out = obj.logs_out;
+    end
 %
 %   Increment run count
 %
