@@ -23,7 +23,7 @@ load('train_data.mat', 'train_data');
 %
 u_t = [0, 1, 1 + 1e-6, 10];
 u = [0, 0, 1, 1];
-h = 0.01;
+h = 0.1;
 t = 0 : h : 10;
 %
 % Configure blocks
@@ -57,7 +57,7 @@ x0 = arrayfun(@(tensor) tensor.value, params);
 adam_optim(@(x) loss_fcn(x, sim, params, n_params), ...
            x0, ...
            'lr', 1e-2, ...
-           'max_iter', 200, ...
+           'max_iter', 2e3, ...
            'jacobian', @(x) jacobian_fcn(params, n_params), ...
            'lr_scheduler', @(lr, iter, f_val) lr_scheduler(lr, iter));
 %
@@ -144,8 +144,8 @@ function lr = lr_scheduler(lr, iter)
 %
 %   Adjust learnig rate
 %
-    if mod(iter, 100) == 0
-        lr = lr * 0.5;
+    if mod(iter, 20) == 0
+        lr = max(lr * 0.9, 8e-5);
         disp("Learning rate: " + num2str(lr));
     end
 end
