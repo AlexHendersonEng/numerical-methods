@@ -17,7 +17,7 @@ addpath(fullfile(file_dir, '..', 'optimisers'));
 %
 % Load training data
 %
-load('train_data.mat', 'train_data');
+load('train_data_SISO.mat', 'train_data');
 %
 % Inputs
 %
