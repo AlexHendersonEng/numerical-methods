@@ -12,9 +12,17 @@ function states = euler_backward(obj)
         obj Simulation;
     end
 %
+%   If no states return
+%
+    states = obj.get_states();
+    if isempty(states)
+        obj.t = obj.t + obj.h;
+        return
+    end
+%
 %   Get current simulation states and derivatives
 %
-    x0 = arrayfun(@(tensor) tensor.value, obj.get_states())';
+    x0 = arrayfun(@(tensor) tensor.value, states)';
     derivatives = reshape(obj.get_derivatives(), [], 1);
 %
 %   Solve for new states
