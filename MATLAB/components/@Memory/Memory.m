@@ -1,35 +1,38 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-% Block superclass
+% Memory block class
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-classdef Block < handle
+classdef Memory < Block
 %
-    properties (Access = public)
-        input Tensor;  % Block input
-        output Tensor; % Block output
+    properties (Access = private)
+        prev_input Tensor; % Previous input
+        ic Tensor; % Initial condition
     end
 %
     methods (Access = public)
-        function obj = Block(n_in, n_out)
+        function obj = Memory(ic)
 %
 %           Input handling
 %
             arguments
-                n_in double = 0;
-                n_out double = 0;
+                ic Tensor; % Initial condition
             end
 %
-%           Block superclass constructor method
+%           Call block superclass
 %
-            obj.input = repmat(Tensor([]), 1, n_in);
-            obj.output = repmat(Tensor([]), 1, n_out);
+            obj = obj@Block(1, 1);
+%
+%           Assign properties
+%
+            obj.ic = ic;
+            obj.prev_input = obj.ic;
         end
 %
-        update(~, ~);
+        update(obj, ~);
 %
-        reset(~);
+        reset(obj);
     end
 %
 end

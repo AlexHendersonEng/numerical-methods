@@ -53,9 +53,13 @@ function initialise(obj)
         end
     else
 %
-%       Simulation is being restarted, so use restart states
+%       Simulation is being restarted, so use restart states and call
+%       restart method on all blocks
 %
         states = obj.restart_states;
+        for block_i = 1 : obj.n_blocks
+            obj.blocks{block_i}.reset();
+        end
     end
 %
 %   Update simulation
