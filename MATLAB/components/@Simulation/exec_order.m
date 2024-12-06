@@ -16,7 +16,7 @@ function count = exec_order(obj, block_i, count)
 %   Specific block base case: If block is of certain type add to
 %   execution order and increment count
 %
-    sp_blocks = {'Integrator'};
+    sp_blocks = {'Integrator', 'Memory'};
     if any(strcmpi(class(obj.blocks{block_i}), sp_blocks))
         obj.order(end + 1) = block_i;
         count = count + 1;
