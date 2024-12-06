@@ -7,11 +7,10 @@
 classdef Derivative < Block
 %
     properties (Access = public)
-        h double;  % Time step
-    end
-%
-    properties (Access = private)
-        prev_input Tensor; % Previous input
+        blocks cell; % Sub-blocks
+        n_blocks double; % Number of sub-blocks
+        connections double; % Sub-block connection graph
+        order double; % Execution order
     end
 %
     methods (Access = public)
@@ -29,11 +28,23 @@ classdef Derivative < Block
 %
 %           Assign properties
 %
-            obj.h = h;
-            obj.prev_input = Tensor(0);
+            obj.blocks = {Memory(Tensor(0));
+                          Operator('+-');
+                          Input([0, 1], [h, h])
+                          Operator('+/')};
+            obj.n_blocks = numel(obj.blocks);
+            obj.connections = [1, 1, 2, 2;
+                               2, 1, 4, 1;
+                               3, 1, 4, 2];
+            obj.order = [1, 2]; % Add blocks 3 and 1 to execution order to
+                                % ensure correct execution of exec_order
+                                % function
+            obj.exec_order();
         end
 %
-        update(obj, ~);
+        update(obj, t);
+%
+        exec_order(obj);
     end
 %
 end
