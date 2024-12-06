@@ -52,6 +52,12 @@ function states = runge_kutta4(obj)
                       x, ...
                       derivatives);
 %
+%   Reset simulation state
+%
+    original_states = arrayfun(@(x, k) Tensor(x), ...
+                               x0);
+    obj.update(original_states, obj.t);
+%
 %   Update simulation time
 %
     obj.t = obj.t + obj.h;
