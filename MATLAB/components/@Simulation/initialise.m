@@ -58,8 +58,9 @@ function initialise(obj)
 %
         states = obj.restart_states;
         for block_i = 1 : obj.n_blocks
-            obj.blocks{block_i}.reset();
+            reset_block(obj.blocks{block_i});
         end
+        
     end
 %
 %   Update simulation
@@ -91,6 +92,25 @@ function get_state_idx(obj, block, block_tree)
         get_state_idx(obj, ...
                       block.blocks{block_i}, ...
                       [block_tree, block_i]);
+    end
+end
+%
+function reset_block(block)
+%
+%   Call reset method on block
+%
+    block.reset();
+%
+%   If block has no sub-blocks return
+%
+    if ~any(strcmpi(fieldnames(block), 'blocks'))
+        return
+    end 
+%
+%   Loop through sub-blocks and reset
+%
+    for block_i = 1 : numel(block.blocks)
+        reset_block(block.blocks{block_i});
     end
 end
 %
